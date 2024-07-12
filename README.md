@@ -4,7 +4,7 @@ Commerce Security & Governance Over privacy alliance
 
 ## 具体工作
 - 建立Github仓库以及组织|7.11bhr
-- 搭建隐语开发调试环境，能跑起来实例代码，主要spu和隐私求交|7.11-7.14all
+- 搭建隐语开发调试环境（python：3.10，pip>=19.3，OS:Ubuntu 20.04，CPU/Memory最低配置是 8C16G），完成隐语部署，能跑起来示例代码，主要spu和隐私求交|7.11-7.14all
 - Dataframe：|7.11-7.16all
   - 规定数据格式，确定需要的数据和能拿到的数据以及将拿到的数据转化为需要的数据
   - 设计接口及调用规范
