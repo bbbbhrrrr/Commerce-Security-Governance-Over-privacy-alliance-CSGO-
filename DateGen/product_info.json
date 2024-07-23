@@ -1,0 +1,1501 @@
+{
+    "电脑办公": {
+        "机械键盘": {
+            "ATK": [
+                "ATK-001 RGB",
+                "ATK-002 Mechanical",
+                "ATK-003 Wireless"
+            ],
+            "红龙": [
+                "K552 Kumara",
+                "K553 RGB",
+                "K580 Vigor"
+            ],
+            "雷柏": [
+                "V500 Pro",
+                "V700S",
+                "V808 Backlight"
+            ],
+            "赛睿": [
+                "Apex 7 TKL",
+                "Apex Pro RGB",
+                "Rival 600"
+            ],
+            "罗技": [
+                "G512 Carbon",
+                "G613 Wireless",
+                "G910 Orion"
+            ]
+        },
+        "笔记本电脑": {
+            "联想": [
+                "ThinkPad X1 Carbon Gen 10",
+                "ThinkPad T14s",
+                "IdeaPad 5 Pro"
+            ],
+            "戴尔": [
+                "XPS 13 Plus",
+                "Inspiron 15 5000",
+                "Vostro 15 3000"
+            ],
+            "惠普": [
+                "Spectre x360 14",
+                "Envy 13-bd0032nr",
+                "Pavilion x360 14"
+            ],
+            "苹果": [
+                "MacBook Air M2",
+                "MacBook Pro 14 M1 Pro",
+                "MacBook Pro 16 M2"
+            ],
+            "华硕": [
+                "ZenBook 14 OLED",
+                "VivoBook 15 K513",
+                "ROG Flow Z13"
+            ]
+        },
+        "显示器": {
+            "三星": [
+                "Odyssey G9 49\"",
+                "CF390 Curved",
+                "LU32R590 Curved"
+            ],
+            "LG": [
+                "UltraWide 34WN80C-B",
+                "27GN950-B 4K",
+                "32UL950-W"
+            ],
+            "戴尔": [
+                "U2720Q 27\"",
+                "S3221QS Curved",
+                "P2419H"
+            ],
+            "华硕": [
+                "ROG Swift PG259QN",
+                "ProArt PA32UCX",
+                "TUF Gaming VG27AQ"
+            ],
+            "AOC": [
+                "CQ32G1 32\"",
+                "U2790PQU",
+                "G2590PX"
+            ]
+        },
+        "打印机": {
+            "佳能": [
+                "PIXMA G7020 MegaTank",
+                "PIXMA TS9520",
+                "imageCLASS MF743Cdw"
+            ],
+            "惠普": [
+                "OfficeJet Pro 9015e",
+                "LaserJet Pro MFP M428fdw",
+                "Envy 6055"
+            ],
+            "兄弟": [
+                "HL-L2350DW",
+                "MFC-L2750DW XL",
+                "DCP-L2550DW"
+            ],
+            "爱普生": [
+                "EcoTank ET-2760",
+                "WorkForce WF-7720",
+                "SureColor P400"
+            ],
+            "三星": [
+                "Xpress M2020W",
+                "CLP-680DW",
+                "ML-3310ND"
+            ]
+        },
+        "鼠标": {
+            "罗技": [
+                "MX Master 3S",
+                "G502 Hero",
+                "M720 Triathlon"
+            ],
+            "雷蛇": [
+                "DeathAdder V2 Pro",
+                "Naga X",
+                "Viper V2 Pro"
+            ],
+            "赛睿": [
+                "Rival 600",
+                "Sensei Ten",
+                "Kana V2"
+            ],
+            "微软": [
+                "Surface Precision",
+                "IntelliMouse Explorer 3.0",
+                "Classic IntelliMouse"
+            ],
+            "达尔优": [
+                "EM915",
+                "M618",
+                "P88"
+            ]
+        }
+    },
+    "家具厨具": {
+        "沙发": {
+            "宜家": [
+                "KLIPPAN 2-Seater",
+                "EKTORP 3-Seater",
+                "SÖDERHAMN Modular"
+            ],
+            "顾家": [
+                "FAVOUR Sofa",
+                "LIVER L-Shaped",
+                "LONGMING Recliner"
+            ],
+            "曲美": [
+                "U-90 Sectional",
+                "Milan Leather",
+                "Samson Fabric"
+            ],
+            "全友": [
+                "5025 Recliner",
+                "S001 Modern",
+                "C906 Fabric"
+            ],
+            "大自然": [
+                "香格里拉 Sofa",
+                "舒适经典 Leather",
+                "瑞士风情 Sectional"
+            ]
+        },
+        "餐桌": {
+            "宜家": [
+                "LINNMON/ADILS Table",
+                "INGATORP Extendable",
+                "MELLTORP Table"
+            ],
+            "欧派": [
+                "A05 Dining Table",
+                "C16 Glass Table",
+                "D13 Wooden Table"
+            ],
+            "全友": [
+                "XJ-005 Rectangle",
+                "J-007 Round",
+                "B-002 Extendable"
+            ],
+            "红苹果": [
+                "HH-101 Solid Wood",
+                "HH-202 Glass Top",
+                "HH-303 Extendable"
+            ],
+            "顾家": [
+                "FA-567 Oak",
+                "GJ-234 Glass",
+                "HG-678 Modern"
+            ]
+        },
+        "微波炉": {
+            "美的": [
+                "M1-L213B 20L",
+                "M1-L202B 23L",
+                "MG20F30CN 20L"
+            ],
+            "格力": [
+                "GMC20BF 20L",
+                "GMC23BF 23L",
+                "GMC28BF 28L"
+            ],
+            "三星": [
+                "MS23F301EAS 23L",
+                "ME731K/XAA 23L",
+                "MS28J5255UW 28L"
+            ],
+            "松下": [
+                "NN-SD373S 25L",
+                "NN-ST25HM 27L",
+                "NN-GT35HB 30L"
+            ],
+            "苏泊尔": [
+                "SBX02A 20L",
+                "SBX03A 23L",
+                "SBX04A 28L"
+            ]
+        },
+        "锅具": {
+            "苏泊尔": [
+                "C22E Non-Stick",
+                "C28 Cookware Set",
+                "W16 Stainless Steel"
+            ],
+            "飞利浦": [
+                "HD9300 Air Fryer",
+                "HD2041 Electric Kettle",
+                "HD2760 Multi-Cooker"
+            ],
+            "九阳": [
+                "KX-24C Pressure Cooker",
+                "KX-20S Slow Cooker",
+                "KX-26B Steamer"
+            ],
+            "双立人": [
+                "S07045 Frypan",
+                "S07027 Cookware Set",
+                "S07034 Saucepan"
+            ],
+            "特福": [
+                "D142S5 Frypan",
+                "D181S5 Cookware Set",
+                "D143S5 Pressure Cooker"
+            ]
+        }
+    },
+    "手机": {
+        "智能手机": {
+            "苹果": [
+                "iPhone 14 Pro Max",
+                "iPhone 14",
+                "iPhone 13 Pro"
+            ],
+            "三星": [
+                "Galaxy S23 Ultra",
+                "Galaxy Note 20 Ultra",
+                "Galaxy A54"
+            ],
+            "小米": [
+                "Mi 13 Pro",
+                "Redmi Note 12 Pro",
+                "Mi Mix Fold"
+            ],
+            "华为": [
+                "P50 Pro",
+                "Mate 50 Pro",
+                "Nova 10"
+            ],
+            "OPPO": [
+                "Find X5 Pro",
+                "Reno 8 Pro",
+                "A77 5G"
+            ],
+            "vivo": [
+                "X80 Pro",
+                "V21e",
+                "Y76s"
+            ]
+        },
+        "平板电脑": {
+            "苹果": [
+                "iPad Pro 12.9\" 2022",
+                "iPad Air 2022",
+                "iPad Mini 2021"
+            ],
+            "华为": [
+                "MatePad Pro 12.6\"",
+                "MediaPad M6 8.4\"",
+                "MatePad 11"
+            ],
+            "小米": [
+                "Pad 5 Pro 12.4\"",
+                "Pad 5 11\"",
+                "Mix Fold 2"
+            ],
+            "微软": [
+                "Surface Pro 9",
+                "Surface Go 3",
+                "Surface Laptop Studio"
+            ],
+            "三星": [
+                "Galaxy Tab S8 Ultra",
+                "Galaxy Tab A8 10.5\"",
+                "Galaxy Tab S7 FE"
+            ]
+        },
+        "手机配件": {
+            "壳牌": [
+                "耐磨手机壳",
+                "透明保护壳",
+                "铝合金保护壳"
+            ],
+            "极客修": [
+                "手机支架",
+                "充电宝",
+                "数据线"
+            ],
+            "乐心": [
+                "蓝牙耳机",
+                "无线充电器",
+                "运动耳机"
+            ],
+            "耳机": [
+                "Bose QC35 II",
+                "AirPods Pro 2",
+                "Sony WH-1000XM4"
+            ],
+            "充电器": [
+                "Anker PowerPort 6",
+                "苹果20W充电器",
+                "三星25W快充"
+            ]
+        }
+    },
+    "女装": {
+        "连衣裙": {
+            "ZARA": [
+                "ZARA Floral Print Dress",
+                "ZARA Polka Dot Dress",
+                "ZARA Satin Dress"
+            ],
+            "H&M": [
+                "H&M Basic Dress",
+                "H&M Ribbed Knit Dress",
+                "H&M Midi Dress"
+            ],
+            "优衣库": [
+                "Uniqlo A-Line Dress",
+                "Uniqlo V-Neck Dress",
+                "Uniqlo Fit and Flare Dress"
+            ],
+            "Forever 21": [
+                "Forever 21 Bodycon Dress",
+                "Forever 21 Wrap Dress",
+                "Forever 21 Maxi Dress"
+            ],
+            "Mango": [
+                "Mango Printed Dress",
+                "Mango Shift Dress",
+                "Mango Sweater Dress"
+            ]
+        },
+        "外套": {
+            "ZARA": [
+                "ZARA Wool Blend Coat",
+                "ZARA Trench Coat",
+                "ZARA Puffer Jacket"
+            ],
+            "H&M": [
+                "H&M Wool Blend Coat",
+                "H&M Leather Jacket",
+                "H&M Denim Jacket"
+            ],
+            "优衣库": [
+                "Uniqlo Ultra Light Down",
+                "Uniqlo Wool Blend Coat",
+                "Uniqlo Parka"
+            ],
+            "Forever 21": [
+                "Forever 21 Faux Fur Coat",
+                "Forever 21 Utility Jacket",
+                "Forever 21 Cardigan"
+            ],
+            "Mango": [
+                "Mango Wool Blend Coat",
+                "Mango Biker Jacket",
+                "Mango Double-Breasted Coat"
+            ]
+        },
+        "裤子": {
+            "ZARA": [
+                "ZARA High-Waisted Pants",
+                "ZARA Wide-Leg Trousers",
+                "ZARA Skinny Jeans"
+            ],
+            "H&M": [
+                "H&M Slim Fit Jeans",
+                "H&M Cargo Pants",
+                "H&M Straight-Leg Pants"
+            ],
+            "优衣库": [
+                "Uniqlo Stretch Pants",
+                "Uniqlo Wide-Leg Trousers",
+                "Uniqlo Skinny Jeans"
+            ],
+            "Forever 21": [
+                "Forever 21 Paperbag Waist Pants",
+                "Forever 21 Flare Jeans",
+                "Forever 21 Joggers"
+            ],
+            "Mango": [
+                "Mango Pleated Trousers",
+                "Mango High-Waisted Jeans",
+                "Mango Leather Pants"
+            ]
+        }
+    },
+    "箱包": {
+        "背包": {
+            "The North Face": [
+                "Recon Backpack",
+                "Borealis Backpack",
+                "Pivoter Backpack"
+            ],
+            "Osprey": [
+                "Osprey Daylite Plus",
+                "Osprey Talon 22",
+                "Osprey Exos 48"
+            ],
+            "Herschel": [
+                "Herschel Little America",
+                "Herschel Settlement",
+                "Herschel Retreat"
+            ],
+            "Targus": [
+                "Targus CitySmart",
+                "Targus Drifter",
+                "Targus Legend"
+            ],
+            "Samsonite": [
+                "Samsonite Karissa Backpack",
+                "Samsonite Tectonic",
+                "Samsonite GuardIT"
+            ]
+        },
+        "行李箱": {
+            "Rimowa": [
+                "Rimowa Essential Cabin",
+                "Rimowa Classic Check-In L",
+                "Rimowa Essential Sleeve"
+            ],
+            "Samsonite": [
+                "Samsonite Winfield 3 DLX",
+                "Samsonite Omni PC",
+                "Samsonite Centric"
+            ],
+            "Tumi": [
+                "Tumi Alpha 3",
+                "Tumi V3",
+                "Tumi Alpha Bravo"
+            ],
+            "American Tourister": [
+                "American Tourister Moonlight",
+                "American Tourister Fieldbrook",
+                "American Tourister Lock 'n' Pop"
+            ],
+            "Travelpro": [
+                "Travelpro Platinum Elite",
+                "Travelpro Maxlite 5",
+                "Travelpro Crew 11"
+            ]
+        },
+        "手提包": {
+            "Michael Kors": [
+                "MK Jet Set",
+                "MK Mercer",
+                "MK Selma"
+            ],
+            "Coach": [
+                "Coach Tabby",
+                "Coach Parker",
+                "Coach Rogue"
+            ],
+            "Gucci": [
+                "Gucci Jackie 1961",
+                "Gucci Marmont",
+                "Gucci Dionysus"
+            ],
+            "Prada": [
+                "Prada Galleria",
+                "Prada Cahier",
+                "Prada Saffiano"
+            ],
+            "Kate Spade": [
+                "Kate Spade New York Sam",
+                "Kate Spade Margaux",
+                "Kate Spade Cameron Street"
+            ]
+        }
+    },
+    "文具用品": {
+        "笔": {
+            "LAMY": [
+                "LAMY Safari",
+                "LAMY 2000",
+                "LAMY Al-Star"
+            ],
+            "Parker": [
+                "Parker Jotter",
+                "Parker IM",
+                "Parker Sonnet"
+            ],
+            "Montblanc": [
+                "Montblanc Meisterstück",
+                "Montblanc Starwalker",
+                "Montblanc Heritage"
+            ],
+            "Pilot": [
+                "Pilot G2",
+                "Pilot Vanishing Point",
+                "Pilot Metropolitan"
+            ],
+            "Uni-ball": [
+                "Uni-ball Jetstream",
+                "Uni-ball Vision Elite",
+                "Uni-ball Signo"
+            ]
+        },
+        "笔记本": {
+            "Moleskine": [
+                "Moleskine Classic Notebook",
+                "Moleskine Cahier Journal",
+                "Moleskine Art Collection"
+            ],
+            "Leuchtturm1917": [
+                "Leuchtturm1917 A5 Hardcover",
+                "Leuchtturm1917 A6 Notebook",
+                "Leuchtturm1917 Bullet Journal"
+            ],
+            "Rhodia": [
+                "Rhodia Webnotebook",
+                "Rhodia Bloc",
+                "Rhodia Goalbook"
+            ],
+            "Field Notes": [
+                "Field Notes Original Kraft",
+                "Field Notes Expedition",
+                "Field Notes Workshop Companion"
+            ],
+            "Paperblanks": [
+                "Paperblanks Midi",
+                "Paperblanks Ultra",
+                "Paperblanks Embellished"
+            ]
+        },
+        "文件夹": {
+            "Leitz": [
+                "Leitz Classic",
+                "Leitz Click & Store",
+                "Leitz MyBox"
+            ],
+            "Fellowes": [
+                "Fellowes Store Station",
+                "Fellowes Premium",
+                "Fellowes Multi-Use"
+            ],
+            "Esselte": [
+                "Esselte 5-Tab Dividers",
+                "Esselte Flexi-File",
+                "Esselte A4 Document Holder"
+            ],
+            "Smead": [
+                "Smead Expanding File",
+                "Smead Color-Coded",
+                "Smead Hanging Folder"
+            ],
+            "Office Depot": [
+                "Office Depot Durable",
+                "Office Depot Poly",
+                "Office Depot Expanding"
+            ]
+        }
+    },
+    "医药": {
+        "感冒药": {
+            "泰诺": [
+                "泰诺林",
+                "泰诺退烧片",
+                "泰诺感冒灵"
+            ],
+            "快克": [
+                "快克片",
+                "快克感冒药",
+                "快克咳嗽药水"
+            ],
+            "新康泰克": [
+                "新康泰克感冒药",
+                "新康泰克止咳药",
+                "新康泰克退烧片"
+            ],
+            "布洛芬": [
+                "布洛芬缓释片",
+                "布洛芬颗粒",
+                "布洛芬胶囊"
+            ],
+            "感冒灵": [
+                "感冒灵胶囊",
+                "感冒灵颗粒",
+                "感冒灵片"
+            ]
+        },
+        "止咳药": {
+            "连花清瘟": [
+                "连花清瘟胶囊",
+                "连花清瘟颗粒",
+                "连花清瘟咳嗽药"
+            ],
+            "止咳糖浆": [
+                "止咳糖浆（儿童）",
+                "止咳糖浆（成人）",
+                "止咳糖浆（复方）"
+            ],
+            "百日咳疫苗": [
+                "百日咳疫苗（成人）",
+                "百日咳疫苗（儿童）",
+                "百日咳疫苗（组合）"
+            ],
+            "咳特灵": [
+                "咳特灵咳嗽药水",
+                "咳特灵止咳颗粒",
+                "咳特灵缓解药"
+            ],
+            "润喉片": [
+                "润喉片（薄荷）",
+                "润喉片（蜂蜜）",
+                "润喉片（草本）"
+            ]
+        },
+        "维生素": {
+            "钙尔奇": [
+                "钙尔奇D片",
+                "钙尔奇咀嚼片",
+                "钙尔奇咀嚼片（儿童）"
+            ],
+            "善存": [
+                "善存片",
+                "善存维生素C",
+                "善存矿物质补充剂"
+            ],
+            "养生堂": [
+                "养生堂维生素B",
+                "养生堂维生素E",
+                "养生堂多维元素片"
+            ],
+            "复合维生素": [
+                "复合维生素A",
+                "复合维生素B",
+                "复合维生素C"
+            ],
+            "维生素D": [
+                "维生素D3",
+                "维生素D2",
+                "维生素D补充剂"
+            ]
+        }
+    },
+    "个护清洁": {
+        "洗发水": {
+            "海飞丝": [
+                "海飞丝清爽去屑",
+                "海飞丝柔顺修复",
+                "海飞丝清凉控油"
+            ],
+            "潘婷": [
+                "潘婷强健修复",
+                "潘婷水润保湿",
+                "潘婷丝质顺滑"
+            ],
+            "霸王": [
+                "霸王防脱发",
+                "霸王药用洗发水",
+                "霸王养发"
+            ],
+            "欧莱雅": [
+                "欧莱雅专业修复",
+                "欧莱雅顺滑亮泽",
+                "欧莱雅强健修复"
+            ],
+            "施华蔻": [
+                "施华蔻润发洗发水",
+                "施华蔻柔顺护理",
+                "施华蔻深层修复"
+            ]
+        },
+        "沐浴露": {
+            "多芬": [
+                "多芬滋润沐浴露",
+                "多芬清爽沐浴露",
+                "多芬深层清洁"
+            ],
+            "力士": [
+                "力士柔滑沐浴露",
+                "力士清爽沐浴露",
+                "力士香氛沐浴露"
+            ],
+            "洁婷": [
+                "洁婷日用",
+                "洁婷夜用",
+                "洁婷护垫"
+            ],
+            "施华蔻": [
+                "施华蔻修复沐浴露",
+                "施华蔻清凉沐浴露",
+                "施华蔻温和滋养"
+            ],
+            "沐浴乳": [
+                "沐浴乳滋润版",
+                "沐浴乳清洁版",
+                "沐浴乳舒缓版"
+            ]
+        },
+        "牙膏": {
+            "高露洁": [
+                "高露洁清爽薄荷",
+                "高露洁抗敏感",
+                "高露洁全效护齿"
+            ],
+            "黑人": [
+                "黑人白牙",
+                "黑人护龈",
+                "黑人清新薄荷"
+            ],
+            "云南白药": [
+                "云南白药牙膏",
+                "云南白药护龈",
+                "云南白药清新版"
+            ],
+            "狮王": [
+                "狮王抗菌牙膏",
+                "狮王清新口气",
+                "狮王修复牙膏"
+            ],
+            "舒客": [
+                "舒客清新薄荷",
+                "舒客防蛀",
+                "舒客全效护齿"
+            ]
+        }
+    },
+    "食品酒饮": {
+        "零食": {
+            "乐事": [
+                "乐事薯片经典口味",
+                "乐事薯片酸奶洋葱",
+                "乐事薯片黑胡椒"
+            ],
+            "百事": [
+                "百事薯片",
+                "百事薄荷口味",
+                "百事烧烤口味"
+            ],
+            "可比克": [
+                "可比克薯片",
+                "可比克坚果",
+                "可比克脆皮饼"
+            ],
+            "好丽友": [
+                "好丽友巧克力",
+                "好丽友薯片",
+                "好丽友夹心饼干"
+            ],
+            "德芙": [
+                "德芙巧克力棒",
+                "德芙牛奶巧克力",
+                "德芙黑巧克力"
+            ]
+        },
+        "饮料": {
+            "可口可乐": [
+                "可口可乐经典",
+                "可口可乐零糖",
+                "可口可乐樱桃味"
+            ],
+            "雪碧": [
+                "雪碧无糖",
+                "雪碧经典",
+                "雪碧青柠味"
+            ],
+            "果粒橙": [
+                "果粒橙经典",
+                "果粒橙无糖",
+                "果粒橙多种果味"
+            ],
+            "脉动": [
+                "脉动清新",
+                "脉动运动饮料",
+                "脉动加能量"
+            ],
+            "维他命水": [
+                "维他命水混合口味",
+                "维他命水莓果",
+                "维他命水柠檬"
+            ]
+        },
+        "酒类": {
+            "茅台": [
+                "茅台飞天",
+                "茅台年份酒",
+                "茅台经典"
+            ],
+            "五粮液": [
+                "五粮液经典",
+                "五粮液珍品",
+                "五粮液生肖"
+            ],
+            "剑南春": [
+                "剑南春陈年",
+                "剑南春白酒",
+                "剑南春经典"
+            ],
+            "洋河": [
+                "洋河蓝色经典",
+                "洋河小曲",
+                "洋河绵柔"
+            ],
+            "泸州老窖": [
+                "泸州老窖特曲",
+                "泸州老窖老号",
+                "泸州老窖国窖"
+            ]
+        }
+    },
+    "美妆护肤": {
+        "护肤品": {
+            "兰蔻": [
+                "兰蔻小黑瓶",
+                "兰蔻水光瓶",
+                "兰蔻青春水"
+            ],
+            "雅诗兰黛": [
+                "雅诗兰黛双效精华",
+                "雅诗兰黛小棕瓶",
+                "雅诗兰黛修护乳"
+            ],
+            "科颜氏": [
+                "科颜氏高保湿霜",
+                "科颜氏维生素C",
+                "科颜氏眼霜"
+            ],
+            "SK-II": [
+                "SK-II神仙水",
+                "SK-II护肤精华",
+                "SK-II修复面膜"
+            ],
+            "欧莱雅": [
+                "欧莱雅复颜抗皱",
+                "欧莱雅清润保湿",
+                "欧莱雅金纯营养"
+            ]
+        },
+        "彩妆": {
+            "MAC": [
+                "MAC口红",
+                "MAC粉底液",
+                "MAC眼影"
+            ],
+            "Bobbi Brown": [
+                "Bobbi Brown遮瑕膏",
+                "Bobbi Brown粉底液",
+                "Bobbi Brown腮红"
+            ],
+            "NARS": [
+                "NARS腮红",
+                "NARS口红",
+                "NARS粉底"
+            ],
+            "Dior": [
+                "Dior口红",
+                "Dior粉底",
+                "Dior眼影"
+            ],
+            "Chanel": [
+                "Chanel唇膏",
+                "Chanel粉底",
+                "Chanel睫毛膏"
+            ]
+        }
+    },
+    "钟表珠宝": {
+        "手表": {
+            "劳力士": [
+                "Rolex Submariner",
+                "Rolex Datejust",
+                "Rolex Day-Date"
+            ],
+            "欧米茄": [
+                "Omega Seamaster",
+                "Omega Speedmaster",
+                "Omega Constellation"
+            ],
+            "卡地亚": [
+                "Cartier Ballon Bleu",
+                "Cartier Santos",
+                "Cartier Panthère"
+            ],
+            "爱彼": [
+                "Audemars Piguet Royal Oak",
+                "Audemars Piguet Royal Oak Offshore",
+                "Audemars Piguet Millenary"
+            ],
+            "万国": [
+                "IWC Portofino",
+                "IWC Big Pilot",
+                "IWC Pilot's Watch"
+            ]
+        },
+        "珠宝": {
+            "周大福": [
+                "周大福钻石项链",
+                "周大福黄金戒指",
+                "周大福珍珠耳环"
+            ],
+            "老凤祥": [
+                "老凤祥钻石戒指",
+                "老凤祥黄金项链",
+                "老凤祥翡翠手镯"
+            ],
+            "施华洛世奇": [
+                "Swarovski水晶项链",
+                "Swarovski水晶耳环",
+                "Swarovski水晶手链"
+            ],
+            "宝格丽": [
+                "Bvlgari Serpenti",
+                "Bvlgari B.zero1",
+                "Bvlgari Lvcea"
+            ],
+            "周大生": [
+                "周大生珍珠项链",
+                "周大生钻石耳环",
+                "周大生黄金戒指"
+            ]
+        }
+    },
+    "家居家装": {
+        "家具": {
+            "宜家": [
+                "KLIPPAN 2-Seater",
+                "EKTORP 3-Seater",
+                "MALM Bed Frame"
+            ],
+            "全友": [
+                "5025 Recliner",
+                "C906 Fabric Sofa",
+                "J-007 Round Table"
+            ],
+            "曲美": [
+                "U-90 Sectional",
+                "Samson Fabric Sofa",
+                "Milan Leather Sofa"
+            ],
+            "美克": [
+                "MK Collection Dining Table",
+                "MK Collection Sideboard",
+                "MK Collection Bed"
+            ],
+            "大自然": [
+                "香格里拉 Sofa",
+                "瑞士风情 Sectional",
+                "舒适经典 Leather"
+            ]
+        },
+        "家居用品": {
+            "宜家": [
+                "LACK Coffee Table",
+                "KALLAX Storage",
+                "PAX Wardrobe"
+            ],
+            "美克": [
+                "MK Collection Bed Linen",
+                "MK Collection Curtains",
+                "MK Collection Rugs"
+            ],
+            "全友": [
+                "全友地毯",
+                "全友窗帘",
+                "全友床上用品"
+            ],
+            "曲美": [
+                "曲美床上用品",
+                "曲美窗帘",
+                "曲美地毯"
+            ],
+            "大自然": [
+                "大自然床垫",
+                "大自然窗帘",
+                "大自然家纺"
+            ]
+        },
+        "装修材料": {
+            "立邦": [
+                "立邦净味",
+                "立邦防潮",
+                "立邦外墙涂料"
+            ],
+            "多乐士": [
+                "多乐士乳胶漆",
+                "多乐士防霉涂料",
+                "多乐士环保涂料"
+            ],
+            "德国施耐德": [
+                "施耐德电线",
+                "施耐德插座",
+                "施耐德开关"
+            ],
+            "东鹏": [
+                "东鹏地砖",
+                "东鹏墙砖",
+                "东鹏卫浴"
+            ],
+            "马可": [
+                "马可涂料",
+                "马可墙纸",
+                "马可地板"
+            ]
+        }
+    },
+    "鞋靴": {
+        "运动鞋": {
+            "耐克": [
+                "Nike Air Max",
+                "Nike React Infinity",
+                "Nike Free Run"
+            ],
+            "阿迪达斯": [
+                "Adidas Ultraboost",
+                "Adidas NMD",
+                "Adidas Stan Smith"
+            ],
+            "彪马": [
+                "Puma RS-X",
+                "Puma Suede",
+                "Puma Future Rider"
+            ],
+            "安德玛": [
+                "Under Armour HOVR",
+                "Under Armour Curry",
+                "Under Armour Charged"
+            ],
+            "New Balance": [
+                "New Balance 990v5",
+                "New Balance 574",
+                "New Balance 1080v11"
+            ]
+        },
+        "皮鞋": {
+            "克劳斯": [
+                "Klaus Oxfords",
+                "Klaus Loafers",
+                "Klaus Derby"
+            ],
+            "万里马": [
+                "Wanlima Leather Shoes",
+                "Wanlima Casual Shoes",
+                "Wanlima Dress Shoes"
+            ],
+            "乔丹": [
+                "Jordan Dress Shoes",
+                "Jordan Loafers",
+                "Jordan Casual Shoes"
+            ],
+            "本尼": [
+                "Benny Leather Shoes",
+                "Benny Suede Shoes",
+                "Benny Formal Shoes"
+            ],
+            "艾德": [
+                "Ad Leather Shoes",
+                "Ad Loafers",
+                "Ad Formal Shoes"
+            ]
+        },
+        "靴子": {
+            "Timberland": [
+                "Timberland 6\" Premium",
+                "Timberland PRO",
+                "Timberland Field Boot"
+            ],
+            "UGG": [
+                "UGG Classic Short",
+                "UGG Bailey Button",
+                "UGG Mini Classic"
+            ],
+            "Dr. Martens": [
+                "Dr. Martens 1460",
+                "Dr. Martens 1461",
+                "Dr. Martens Pascal"
+            ],
+            "Columbia": [
+                "Columbia Bugaboot",
+                "Columbia Newton Ridge",
+                "Columbia Minx"
+            ],
+            "Sorel": [
+                "Sorel Caribou",
+                "Sorel Joan of Arctic",
+                "Sorel Tivoli"
+            ]
+        }
+    },
+    "保健": {
+        "营养补充": {
+            "汤臣倍健": [
+                "汤臣倍健维生素C",
+                "汤臣倍健钙片",
+                "汤臣倍健复合维生素"
+            ],
+            "安利": [
+                "安利钙片",
+                "安利维生素B",
+                "安利Omega-3"
+            ],
+            "健安喜": [
+                "健安喜多种维生素",
+                "健安喜钙片",
+                "健安喜维生素C"
+            ],
+            "中科院": [
+                "中科院钙片",
+                "中科院维生素D",
+                "中科院胶原蛋白"
+            ],
+            "菲利普": [
+                "菲利普维生素E",
+                "菲利普鱼油",
+                "菲利普钙镁片"
+            ]
+        },
+        "运动健康": {
+            "舒华": [
+                "舒华跑步机",
+                "舒华动感单车",
+                "舒华椭圆机"
+            ],
+            "迪卡侬": [
+                "迪卡侬跑步机",
+                "迪卡侬哑铃",
+                "迪卡侬瑜伽垫"
+            ],
+            "乔山": [
+                "乔山跑步机",
+                "乔山椭圆机",
+                "乔山哑铃"
+            ],
+            "博朗": [
+                "博朗电动牙刷",
+                "博朗电动剃须刀",
+                "博朗健康秤"
+            ],
+            "飞利浦": [
+                "飞利浦电动牙刷",
+                "飞利浦剃须刀",
+                "飞利浦健康秤"
+            ]
+        }
+    },
+    "母婴": {
+        "婴儿用品": {
+            "好孩子": [
+                "好孩子婴儿推车",
+                "好孩子婴儿床",
+                "好孩子婴儿背带"
+            ],
+            "贝亲": [
+                "贝亲奶瓶",
+                "贝亲安抚奶嘴",
+                "贝亲洗护套装"
+            ],
+            "宝宝乐": [
+                "宝宝乐婴儿车",
+                "宝宝乐婴儿床",
+                "宝宝乐尿布"
+            ],
+            "奶粉": [
+                "婴儿奶粉1段",
+                "婴儿奶粉2段",
+                "婴儿奶粉3段"
+            ],
+            "沐浴露": [
+                "婴儿沐浴露",
+                "婴儿洗发水",
+                "婴儿护肤霜"
+            ]
+        },
+        "孕妇用品": {
+            "孕妇装": [
+                "孕妇连衣裙",
+                "孕妇裤子",
+                "孕妇外套"
+            ],
+            "孕妇奶粉": [
+                "孕妇奶粉A",
+                "孕妇奶粉B",
+                "孕妇奶粉C"
+            ],
+            "孕期维生素": [
+                "孕期复合维生素",
+                "孕期钙片",
+                "孕期铁片"
+            ],
+            "产后护理": [
+                "产后恢复带",
+                "产后护理垫",
+                "产后修复霜"
+            ],
+            "母乳喂养": [
+                "母乳储存袋",
+                "母乳喂养枕",
+                "母乳喂养手套"
+            ]
+        }
+    },
+    "家电": {
+        "电视": {
+            "三星": [
+                "Samsung QLED 4K",
+                "Samsung UHD TV",
+                "Samsung The Frame"
+            ],
+            "索尼": [
+                "Sony Bravia A8H",
+                "Sony X900H",
+                "Sony Master Series A9G"
+            ],
+            "LG": [
+                "LG OLED C1",
+                "LG NanoCell 85",
+                "LG UHD AI ThinQ"
+            ],
+            "小米": [
+                "Xiaomi Mi TV 4A",
+                "Xiaomi Mi TV Q1",
+                "Xiaomi Mi TV 5"
+            ],
+            "海信": [
+                "Hisense U7G",
+                "Hisense H8G",
+                "Hisense A6 Series"
+            ]
+        },
+        "冰箱": {
+            "美的": [
+                "Midea French Door",
+                "Midea Side-by-Side",
+                "Midea Top Freezer"
+            ],
+            "海尔": [
+                "Haier Bottom Freezer",
+                "Haier French Door",
+                "Haier Side-by-Side"
+            ],
+            "LG": [
+                "LG InstaView",
+                "LG Door-in-Door",
+                "LG Smart Inverter"
+            ],
+            "三星": [
+                "Samsung Family Hub",
+                "Samsung FlexZone",
+                "Samsung Twin Cooling"
+            ],
+            "博世": [
+                "Bosch Serie 6",
+                "Bosch Serie 8",
+                "Bosch KGN49AI35"
+            ]
+        },
+        "洗衣机": {
+            "LG": [
+                "LG Front Load",
+                "LG Top Load",
+                "LG Twin Wash"
+            ],
+            "三星": [
+                "Samsung AddWash",
+                "Samsung FlexWash",
+                "Samsung QuickDrive"
+            ],
+            "美的": [
+                "Midea Front Load",
+                "Midea Top Load",
+                "Midea Twin Tub"
+            ],
+            "海尔": [
+                "Haier Front Load",
+                "Haier Top Load",
+                "Haier Dual Drum"
+            ],
+            "博世": [
+                "Bosch Serie 4",
+                "Bosch Serie 6",
+                "Bosch Serie 8"
+            ]
+        },
+        "空调": {
+            "格力": [
+                "Gree 1.5HP",
+                "Gree 2.0HP",
+                "Gree Central AC"
+            ],
+            "美的": [
+                "Midea Split AC",
+                "Midea Window AC",
+                "Midea Portable AC"
+            ],
+            "海尔": [
+                "Haier Wall Mounted",
+                "Haier Floor Standing",
+                "Haier Window AC"
+            ],
+            "大金": [
+                "Daikin Inverter",
+                "Daikin Split",
+                "Daikin Floor Standing"
+            ],
+            "三菱电机": [
+                "Mitsubishi Electric Split",
+                "Mitsubishi Electric VRF",
+                "Mitsubishi Electric Window"
+            ]
+        }
+    },
+    "儿童用品": {
+        "玩具": {
+            "乐高": [
+                "LEGO City",
+                "LEGO Friends",
+                "LEGO Technic"
+            ],
+            "费雪": [
+                "Fisher-Price Toys",
+                "Fisher-Price Activity Centers",
+                "Fisher-Price Learning"
+            ],
+            "孩之宝": [
+                "Hasbro Transformers",
+                "Hasbro Nerf",
+                "Hasbro Play-Doh"
+            ],
+            "拉比": [
+                "Labi Educational Toys",
+                "Labi Plush Toys",
+                "Labi Learning Toys"
+            ],
+            "芭比": [
+                "Barbie Dreamhouse",
+                "Barbie Fashionistas",
+                "Barbie Career Dolls"
+            ]
+        },
+        "婴儿用品": {
+            "好孩子": [
+                "Goodbaby Stroller",
+                "Goodbaby High Chair",
+                "Goodbaby Car Seat"
+            ],
+            "贝亲": [
+                "Pigeon Baby Bottles",
+                "Pigeon Teat",
+                "Pigeon Baby Wipes"
+            ],
+            "宝宝乐": [
+                "Babylea Baby Carrier",
+                "Babylea Diaper Bag",
+                "Babylea Baby Bath"
+            ],
+            "安抚奶嘴": [
+                "Nuk Pacifiers",
+                "Philips Avent Pacifiers",
+                "MAM Pacifiers"
+            ],
+            "尿布": [
+                "Huggies Diapers",
+                "Pampers Diapers",
+                "Merries Diapers"
+            ]
+        },
+        "孕妇用品": {
+            "妈咪宝贝": [
+                "MamyPoko Pants",
+                "MamyPoko Baby Wipes",
+                "MamyPoko Night Pants"
+            ],
+            "贝亲": [
+                "Pigeon Nursing Pillow",
+                "Pigeon Maternity Bra",
+                "Pigeon Breast Pump"
+            ],
+            "英氏": [
+                "Yingshi Maternity Clothes",
+                "Yingshi Breastfeeding Pillow",
+                "Yingshi Baby Care"
+            ],
+            "Goodbaby": [
+                "Goodbaby Maternity Wear",
+                "Goodbaby Nursing Pillow",
+                "Goodbaby Nursing Pads"
+            ],
+            "Gerber": [
+                "Gerber Baby Food",
+                "Gerber Formula",
+                "Gerber Snacks"
+            ]
+        }
+    },
+    "运动户外": {
+        "运动鞋": {
+            "耐克": [
+                "Nike Air Max",
+                "Nike React Infinity",
+                "Nike Free Run"
+            ],
+            "阿迪达斯": [
+                "Adidas Ultraboost",
+                "Adidas NMD",
+                "Adidas Stan Smith"
+            ],
+            "彪马": [
+                "Puma RS-X",
+                "Puma Suede",
+                "Puma Future Rider"
+            ],
+            "安德玛": [
+                "Under Armour HOVR",
+                "Under Armour Curry",
+                "Under Armour Charged"
+            ],
+            "New Balance": [
+                "New Balance 990v5",
+                "New Balance 574",
+                "New Balance 1080v11"
+            ]
+        },
+        "户外装备": {
+            "北面": [
+                "The North Face Base Camp",
+                "The North Face Thermoball",
+                "The North Face Verto"
+            ],
+            "哥伦比亚": [
+                "Columbia Bugaboo",
+                "Columbia Steens Mountain",
+                "Columbia Peakfreak"
+            ],
+            "狂野": [
+                "Wildland Hiking Boots",
+                "Wildland Sleeping Bags",
+                "Wildland Tents"
+            ],
+            "探路者": [
+                "Toread Hiking Shoes",
+                "Toread Jackets",
+                "Toread Sleeping Bags"
+            ],
+            "狮子头": [
+                "Lion Head Outdoor Gear",
+                "Lion Head Sleeping Bags",
+                "Lion Head Tents"
+            ]
+        },
+        "健身器材": {
+            "舒华": [
+                "Shuhua Treadmill",
+                "Shuhua Elliptical",
+                "Shuhua Exercise Bike"
+            ],
+            "迪卡侬": [
+                "Decathlon Treadmill",
+                "Decathlon Dumbbells",
+                "Decathlon Yoga Mats"
+            ],
+            "乔山": [
+                "Johnson Treadmill",
+                "Johnson Elliptical",
+                "Johnson Exercise Bike"
+            ],
+            "飞利浦": [
+                "Philips Airfryer",
+                "Philips Blender",
+                "Philips Juicer"
+            ],
+            "博朗": [
+                "Braun Electric Toothbrush",
+                "Braun Hair Dryer",
+                "Braun Food Processor"
+            ]
+        }
+    }
+}
