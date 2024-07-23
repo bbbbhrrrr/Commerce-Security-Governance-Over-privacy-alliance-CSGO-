@@ -109,7 +109,7 @@ class Consumer:
 
     def make_payment(self):
         self.order_time = datetime.now()
-        return self.order_time
+        return self.order_time.strftime("%Y-%m-%d %H:%M:%S")
 
     def receive_order(self):
         self.receive_order_time = generate_random_datetime(self.order_time.year, self.order_time.year + 1, 1)
@@ -126,7 +126,7 @@ class Producer:
         self.name = generate_random_name()
 
     def ship_order(self, payment_time=None):
-        return generate_random_datetime(payment_time.year, payment_time.year + 1, 0)
+        return generate_random_datetime(str_to_datetime(payment_time).year, str_to_datetime(payment_time).year + 1, 0)
 
     def process_refund(self, refund_request_time):
         if refund_request_time == 9999:
@@ -160,7 +160,7 @@ class GenOrder:
             return_time = 9999  # 9999表示未退货
             refund_amount = product_amount
         elif order_type == 'rent_not_return':  # 租用不还
-            product_info = "Rent_Product_" + str(random.randint(1, 100))
+            # product_info = "Rent_Product_" + str(random.randint(1, 100))
             platform_type = "租赁平台"
         elif order_type == 'partial_payment':  # 收货后仅支付订金
             deposit_amount = round(product_amount * 0.1, 2)  # 仅支付10%的订金
