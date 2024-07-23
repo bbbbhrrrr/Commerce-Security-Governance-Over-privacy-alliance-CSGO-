@@ -96,8 +96,6 @@ def generate_random_product_info(categories):
 
     return product_info
 
-
-
 # Consumer类
 class Consumer:
     def __init__(self):
@@ -122,7 +120,7 @@ class Consumer:
 # Producer类
 class Producer:
     def __init__(self):
-        self.seller_id = generate_random_id()
+        self.id_number = generate_random_id()
         self.name = generate_random_name()
 
     def ship_order(self, payment_time=None):
@@ -136,9 +134,10 @@ class Producer:
 
 # GenOrder类
 class GenOrder:
-    def __init__(self, output_file):
+    def __init__(self, output_file,plantfrom):
         self.output_file = output_file
         self.orders = []
+        self.plantform = plantfrom
 
     def generate_order(self, buyer, seller, order_type='normal'):
         order_id = str(uuid.uuid4())
@@ -152,7 +151,7 @@ class GenOrder:
         return_time = 9999  # 9999表示未退货
         payment_amount = product_amount
         refund_amount = 0.0 # 0表示未退款
-        platform_type = "电商平台"
+        platform_type = self.plantform
 
         # 根据订单类型生成不良订单
         if order_type == 'refund_no_return':  # 仅退款不退货
@@ -163,7 +162,7 @@ class GenOrder:
             # product_info = "Rent_Product_" + str(random.randint(1, 100))
             platform_type = "租赁平台"
         elif order_type == 'partial_payment':  # 收货后仅支付订金
-            deposit_amount = round(product_amount * 0.1, 2)  # 仅支付10%的订金
+            deposit_amount = round(product_amount * 0.5, 2)  # 仅支付50%的订金
             payment_amount = deposit_amount
         elif order_type == 'payment_no_shipment':  # 付款不发货
             shipping_time = 9999  # 9999表示未发货
@@ -173,24 +172,45 @@ class GenOrder:
                 return_time = seller.process_refund(refund_request_time)
                 refund_amount = product_amount
 
-        order = {
-            "订单号": order_id,
-            "实名用户（身份证）": buyer.id_number,
-            "商家信息（身份证）": seller.seller_id,
-            "商品信息": product_info,
-            "商品金额": product_amount,
-            "订单生成时间": order_creation_time,
-            "付款时间": payment_time,
-            "发货时间": shipping_time,
-            "收货时间": receiving_time,
-            "退款时间": refund_request_time,
-            "退货时间": return_time,
-            "付款金额": payment_amount,
-            "退款金额": refund_amount,
-            "平台类型": platform_type
-        }
-        
-        self.orders.append(order)
+        if platform_type == "TB" or platform_type == "JD" or platform_type == "PDD" or platform_type == "XY":
+            order = {
+                "订单号": order_id,
+                "实名用户（身份证）": buyer.id_number,
+                "商家信息（身份证）": seller.id_number,
+                "商品信息": product_info,
+                "商品金额": product_amount,
+                "订单生成时间": order_creation_time,
+                "付款时间": payment_time,
+                "发货时间": shipping_time,
+                "收货时间": receiving_time,
+                "退款时间": refund_request_time,
+                "退货时间": return_time,
+                "付款金额": payment_amount,
+                "退款金额": refund_amount,
+                "平台类型": platform_type
+            }
+            
+            self.orders.append(order)
+
+        elif platform_type == "lease_platform":
+            order = {
+                "订单号": order_id,
+                "实名用户（身份证）": buyer.id_number,
+                "商家信息（身份证）": seller.id_number,
+                "商品信息": product_info,
+                "商品金额": product_amount,
+                "订单生成时间": order_creation_time,
+                "付款时间": payment_time,
+                "发货时间": shipping_time,
+                "收货时间": receiving_time,
+                "到期时间": refund_request_time,
+                "发回时间": return_time,
+                "付款金额": payment_amount,
+                "退款金额": refund_amount,
+                "平台类型": platform_type
+            }
+            
+            self.orders.append(order)
 
     def write_to_csv(self):
         with open(self.output_file, mode='w', newline='', encoding='utf-8') as file:
@@ -198,18 +218,85 @@ class GenOrder:
             writer.writeheader()
             writer.writerows(self.orders)
 
+# Payment_Plantform类
+class Payment_Plantform:
+    def __init__(self,output_file,plantform):
+        self.output_file = output_file
+        self.credits = []
+        self.plantform = plantform
+    
+    # 对Consumer和Producer进行信用评级
+    def credit_rating(self,person):
+        person.credit = random.randint(0, 100)
+
+        credit = {
+            "用户（身份证）": person.id_number,
+            "信用评级": person.credit,
+            "平台类型": self.plantform
+        }
+        self.credits.append(credit)
+
+    # 写入CSV文件
+    def write_to_csv(self):    
+        with open(self.output_file, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=self.credits[0].keys())
+            writer.writeheader()
+            writer.writerows(self.credits)
+
 # 示例使用
-order_gen = GenOrder("orders.csv")
+
+# 随机生成十个Consumer和Producer
+consumers = [Consumer() for _ in range(10)]
+producers = [Producer() for _ in range(10)]
+
+# 生成订单
+order_gen_TB= GenOrder("orders_TB.csv","TB")
+order_gen_JD= GenOrder("orders_JD.csv","JD")
+order_gen_PDD= GenOrder("orders_PDD.csv","PDD")
+order_gen_lease_platform= GenOrder("orders_lease_platform.csv","lease_platform")
+order_gen_XY = GenOrder("orders_XY.csv","XY")
+
+# 生成支付平台
+payment_plantform_AliPay = Payment_Plantform("payment_plantform_AliPay.csv","AliPay")
+payment_plantform_WeChat = Payment_Plantform("payment_plantform_WeChat.csv","WeChat")
+payment_plantform_CreditCard = Payment_Plantform("payment_plantform_CreditCard.csv","CreditCard")
 
 # 生成普通订单和不良订单
-for _ in range(5):  # 生成5个普通订单
-    buyer = Consumer()
-    seller = Producer()
-    order_gen.generate_order(buyer, seller, order_type='normal')
+# 分别生成淘宝、京东、拼多多和租赁平台的订单
+for _ in range(50):  # 生成50个普通订单
+    order_gen_TB.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='normal')  # 淘宝订单
+    order_gen_JD.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='normal')  # 京东订单
+    order_gen_PDD.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='normal')  # 拼多多订单
+    order_gen_lease_platform.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='normal')  # 租赁平台订单
+    order_gen_XY.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='normal')  # XY订单
+    
 
-order_gen.generate_order(Consumer(), Producer(), order_type='refund_no_return')  # 仅退款不退货订单
-order_gen.generate_order(Consumer(), Producer(), order_type='rent_not_return')  # 租用不还订单
-order_gen.generate_order(Consumer(), Producer(), order_type='partial_payment')  # 收货后仅支付订金订单
-order_gen.generate_order(Consumer(), Producer(), order_type='payment_no_shipment')  # 付款不发货订单
+for _ in range(10):  # 生成10个不良订单
+    order_gen_TB.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='refund_no_return')  # 仅退款不退货订单
+    order_gen_JD.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='refund_no_return')  # 仅退款不退货订单
+    order_gen_PDD.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='refund_no_return')  # 仅退款不退货订单
+    order_gen_lease_platform.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='rent_not_return')  # 租用不还订单
+    order_gen_XY.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='partial_payment')  # 收货后仅支付订金订单
+    order_gen_XY.generate_order(consumers[random.randint(0, 9)], producers[random.randint(0, 9)], order_type='payment_no_shipment')  # 付款不发货订单
 
-order_gen.write_to_csv()
+# 生成信用评级
+for consumer in consumers:
+    payment_plantform_AliPay.credit_rating(consumer)
+    payment_plantform_WeChat.credit_rating(consumer)
+    payment_plantform_CreditCard.credit_rating(consumer)
+
+for producer in producers:
+    payment_plantform_AliPay.credit_rating(producer)
+    payment_plantform_WeChat.credit_rating(producer)
+    payment_plantform_CreditCard.credit_rating(producer)
+
+# 写入CSV文件
+order_gen_TB.write_to_csv()
+order_gen_JD.write_to_csv()
+order_gen_PDD.write_to_csv()
+order_gen_lease_platform.write_to_csv()
+order_gen_XY.write_to_csv()
+
+payment_plantform_AliPay.write_to_csv()
+payment_plantform_WeChat.write_to_csv()
+payment_plantform_CreditCard.write_to_csv()
