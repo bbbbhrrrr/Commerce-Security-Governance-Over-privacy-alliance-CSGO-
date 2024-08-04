@@ -117,7 +117,29 @@ https://tianchi.aliyun.com/dataset?spm=a2c22.12281976.J_3941670930.19.7e0722fdrE
 给所有节点做一个全连接，双方的隐私求交
 
 ## 机器学习 zay/gzc/gph 8.10
-使用hungging face
+
+可以考虑使用hungging face
+
+### 任务一：确定特征维度与分类数
+
+若为垂直联邦，则不同平台拥有不同维度的特征。此处特征不包括用户的识别码，只包含有用的特征。
+
+分类数即通过这一模型，可以将用户分成多少类，最终呈现效果为：向模型输入一组新的特征，模型输出这一特征符合各分类的概率。
+
+### 任务二：设计神经网络
+
+主要是怎么分层，怎么流，怎么调参。
+
+还要设计 loss 函数。
+
+### 任务三：训练，让模型收敛
+
+其实就是调整神经网络各层各个节点的参数，让模型对“具有对应特征的样本”能够输出一个比较收敛的结果。
+
+### 任务四：拆分，联邦
+
+确定什么平台有什么特征，然后进行联邦，可以参考：[https://www.secretflow.org.cn/zh-CN/docs/secretflow/v1.5.0b0/tutorial/Split_Learning_for_bank_marketing](https://www.secretflow.org.cn/zh-CN/docs/secretflow/v1.5.0b0/tutorial/Split_Learning_for_bank_marketing)
+
 
 ## 结合联邦学习 all
 
