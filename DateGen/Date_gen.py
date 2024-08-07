@@ -143,10 +143,9 @@ def generate_random_product_info(categories):
 
 
 class Consumer:
-    def __init__(self,id_number):
-        self.buyer_id = id_number
+    def __init__(self,_id_number):
         self.name = generate_random_name()
-        self.id_number = generate_random_id()
+        self.id_number = _id_number
         self.order_time = None
         self.receive_order_time = None
 
