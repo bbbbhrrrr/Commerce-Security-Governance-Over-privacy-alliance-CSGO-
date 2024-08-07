@@ -143,8 +143,8 @@ def generate_random_product_info(categories):
 
 
 class Consumer:
-    def __init__(self):
-        self.buyer_id = generate_random_id()
+    def __init__(self,id_number):
+        self.buyer_id = id_number
         self.name = generate_random_name()
         self.id_number = generate_random_id()
         self.order_time = None
@@ -173,8 +173,8 @@ class Consumer:
 
 
 class Producer:
-    def __init__(self):
-        self.id_number = generate_random_id()
+    def __init__(self,id_number):
+        self.id_number = id_number
         self.name = generate_random_name()
 
     def ship_order(self, payment_time=None):
@@ -202,7 +202,7 @@ class GenOrder:
         self.orders = []
         self.plantform = plantfrom
 
-    def generate_order(self, buyer, seller, order_type="normal"):
+    def generate_order(self, buyer, seller,order_type="normal"):
         order_id = str(uuid.uuid4())
         product_info = generate_random_product_info(categories)
         product_amount = round(random.uniform(10.0, 1000.0), 2)
@@ -317,10 +317,13 @@ class Payment_Plantform:
 
 # 示例使用
 
+# 随机生成50个身份证号ID，存储在列表中
+ID_list = [generate_random_id() for _ in range(50)]
 
-# 随机生成十个Consumer和Producer
-consumers = [Consumer() for _ in range(10)]
-producers = [Producer() for _ in range(10)]
+# 随机生成10个消费者和10个生产者
+consumers = [Consumer(ID_list[i]) for i in range(10)]
+producers = [Producer(ID_list[i]) for i in range(10)]
+
 
 # 生成订单
 order_gen_TB = GenOrder("orders_TB.csv", "TB")
