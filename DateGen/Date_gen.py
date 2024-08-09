@@ -224,7 +224,7 @@ class GenOrder:
             # product_info = "Rent_Product_" + str(random.randint(1, 100))
             platform_type = "租赁平台"
         elif order_type == "partial_payment":  # 收货后仅支付订金
-            deposit_amount = round(product_amount * 0.5, 2)  # 仅支付50%的订金
+            deposit_amount = round(random.uniform(product_amount * 0.1, product_amount * 0.5), 2)  # 随机选择订金在总价的10%到50%之间的值
             payment_amount = deposit_amount
         elif order_type == "payment_no_shipment":  # 付款不发货
             shipping_time = 9999  # 9999表示未发货

@@ -13,10 +13,10 @@ data = pd.read_csv('count_orders_JD.csv')
 
 #
 #基础恶意行为分数
-data['Refund_Only_Score'] = np.log(data['Refund_Only_Count'] + np.exp(data['Total_Count']) + np.exp(1) * np.exp(data['Refund_Only_Count'] / data['Total_Count']))
-data['Rental_Not_Returned_Score'] = np.log(50 * data['Rental_Not_Returned_Count'] + np.exp(1) * np.exp(data['Total_Count']) + np.exp(1) * np.exp(data['Rental_Not_Returned_Count'] / data['Total_Count']))
-data['Partial_Payment_After_Receipt_Score'] = np.log(data['Partial_Payment_After_Receipt_Count'] + np.exp(1) * np.exp(data['Total_Count']) + np.exp(1) * np.exp(data['Partial_Payment_After_Receipt_Count'] / data['Total_Count']))
-data['Payment_Without_Delivery_Score'] = np.log(data['Payment_Without_Delivery_Count'] + np.exp(data['Total_Count']) + 50 * np.exp(1) * np.exp(data['Payment_Without_Delivery_Count'] / data['Total_Count']))
+data['Refund_Only_Score'] = np.log(data['Refund_Only_Count'] + np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Refund_Only_Count'] / data['Total_Count']))
+data['Rental_Not_Returned_Score'] = np.log(50 * data['Rental_Not_Returned_Count'] + np.exp(1) * np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Rental_Not_Returned_Count'] / data['Total_Count']))
+data['Partial_Payment_After_Receipt_Score'] = np.log(data['Partial_Payment_After_Receipt_Count'] + np.exp(1) * np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Partial_Payment_After_Receipt_Count'] / data['Total_Count']))
+data['Payment_Without_Delivery_Score'] = np.log(data['Payment_Without_Delivery_Count'] + np.exp(data['Amount_of_Loss']) + 50 * np.exp(1) * np.exp(data['Payment_Without_Delivery_Count'] / data['Total_Count']))
 
 #时间序列特征
 data['Total_Count_Rolling'] = data['Total_Count'].rolling(window=3, min_periods=1).mean()
