@@ -38,7 +38,7 @@ def Count(file):
             results[Producer_ID][0] += 1
 
             Amount_of_Loss = Product_Amount # 初始化造成损失金额
-            results[Consumer_ID][5] = Amount_of_Loss    # 初始化消费者造成损失金额
+            results[Consumer_ID][5] += Amount_of_Loss    # 初始化消费者造成损失金额
 
             if Platform_Type == 'lease_platform':
                 if Return_Time == '9999':           # 租用不还
@@ -50,8 +50,8 @@ def Count(file):
                     results[Consumer_ID][3] += 1
                 if Payment_Amount != 0 and Shipping_Time == '9999':     # 付款不发货
                     results[Producer_ID][4] += 1
-                    results[Consumer_ID][5] = 0   # 付款不发货，消费者造成损失金额为0             
-                    results[Producer_ID][5] = Amount_of_Loss    # 付款不发货，生产者造成损失金额为Amount_of_Loss
+                    results[Consumer_ID][5] -= Amount_of_Loss    # 付款不发货，消费者造成损失金额为0             
+                    results[Producer_ID][5] += Amount_of_Loss    # 付款不发货，生产者造成损失金额为Amount_of_Loss
             else:
                 if Return_Time == '9999' and Refund_Amount == Product_Amount:   # 仅退款不退货
                     results[Consumer_ID][1] += 1
@@ -60,8 +60,8 @@ def Count(file):
                     results[Consumer_ID][3] += 1
                 if Payment_Amount != 0 and Shipping_Time == '9999':     # 付款不发货
                     results[Producer_ID][4] += 1
-                    results[Consumer_ID][5] = 0   # 付款不发货，消费者造成损失金额为0             
-                    results[Producer_ID][5] = Amount_of_Loss    # 付款不发货，生产者造成损失金额为Amount_of_Loss
+                    results[Consumer_ID][5] -= Amount_of_Loss    # 付款不发货，消费者造成损失金额为0             
+                    results[Producer_ID][5] += Amount_of_Loss    # 付款不发货，生产者造成损失金额为Amount_of_Loss
             
 
 
