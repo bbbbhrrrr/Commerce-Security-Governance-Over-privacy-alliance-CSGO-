@@ -327,6 +327,12 @@ producers = [Producer(ID_list[i]) for i in range(10)]
 # 生成订单
 order_gen_TB = GenOrder("orders_TB.csv", "TB")
 order_gen_JD = GenOrder("orders_JD.csv", "JD")
+
+# 生成长期订单
+order_gen_JD_Month = GenOrder("orders_JD_Month.csv", "JD")
+order_gen_JD_Half_Year = GenOrder("orders_JD_Half_Year.csv", "JD")
+
+
 order_gen_PDD = GenOrder("orders_PDD.csv", "PDD")
 order_gen_lease_platform = GenOrder(
     "orders_lease_platform.csv", "lease_platform")
@@ -341,6 +347,7 @@ payment_plantform_CreditCard = Payment_Plantform(
     "payment_plantform_CreditCard.csv", "CreditCard"
 )
 
+'''
 # 生成普通订单和不良订单
 # 分别生成淘宝、京东、拼多多和租赁平台的订单
 for _ in range(50):  # 生成50个普通订单
@@ -354,6 +361,18 @@ for _ in range(50):  # 生成50个普通订单
         producers[random.randint(0, 9)],
         order_type="normal",
     )  # 京东订单
+
+    order_gen_JD_Month.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type="normal",
+    )  # 京东月订单
+    order_gen_JD_Half_Year.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type="normal",
+    )  # 京东半年订单
+
     order_gen_PDD.generate_order(
         consumers[random.randint(0, 9)],
         producers[random.randint(0, 9)],
@@ -382,6 +401,18 @@ for _ in range(10):  # 生成10个不良订单
         producers[random.randint(0, 9)],
         order_type="refund_no_return",
     )  # 仅退款不退货订单
+    # 生成长期订单
+    order_gen_JD_Month.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type="refund_no_return",
+    )  # 仅退款不退货订单
+    order_gen_JD_Half_Year.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type="refund_no_return",
+    )  # 仅退款不退货订单
+    # 
     order_gen_PDD.generate_order(
         consumers[random.randint(0, 9)],
         producers[random.randint(0, 9)],
@@ -403,6 +434,52 @@ for _ in range(10):  # 生成10个不良订单
         order_type="payment_no_shipment",
     )  # 付款不发货订单
 
+'''
+
+act_type=["normal","refund_no_return","rent_not_return","partial_payment","payment_no_shipment"]
+
+for _ in range(100):  # 生成100个随机订单
+    order_gen_TB.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type=random.choice(act_type),
+    )  # 淘宝订单
+    order_gen_JD.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type=random.choice(act_type),
+    )  # 京东订单
+
+    order_gen_JD_Month.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type=random.choice(act_type),
+    )  # 京东月订单
+    order_gen_JD_Half_Year.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type=random.choice(act_type),
+    )  # 京东半年订单
+
+    order_gen_PDD.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type=random.choice(act_type),
+    )  # 拼多多订单
+    order_gen_lease_platform.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type=random.choice(act_type),
+    )  # 租赁平台订单
+    order_gen_XY.generate_order(
+        consumers[random.randint(0, 9)],
+        producers[random.randint(0, 9)],
+        order_type=random.choice(act_type),
+    )  # XY订单
+
+
+
+
 # 生成信用评级
 for consumer in consumers:
     payment_plantform_AliPay.credit_rating(consumer)
@@ -417,9 +494,12 @@ for producer in producers:
 # 写入CSV文件
 order_gen_TB.write_to_csv()
 order_gen_JD.write_to_csv()
+order_gen_JD_Month.write_to_csv()
+order_gen_JD_Half_Year.write_to_csv()
 order_gen_PDD.write_to_csv()
 order_gen_lease_platform.write_to_csv()
 order_gen_XY.write_to_csv()
+
 
 payment_plantform_AliPay.write_to_csv()
 payment_plantform_WeChat.write_to_csv()

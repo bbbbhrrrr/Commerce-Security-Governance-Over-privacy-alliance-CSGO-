@@ -37,7 +37,7 @@ def Count(file):
             results[Consumer_ID][0] += 1
             results[Producer_ID][0] += 1
 
-            Amount_of_Loss = Product_Amount # 初始化造成损失金额
+            Amount_of_Loss = float(Product_Amount) # 初始化造成损失金额
             results[Consumer_ID][5] += Amount_of_Loss    # 初始化消费者造成损失金额
 
             if Platform_Type == 'lease_platform':
@@ -46,7 +46,7 @@ def Count(file):
                 if Return_Time == '9999' and Refund_Amount == Product_Amount:   # 仅退款不退货
                     results[Consumer_ID][1] += 1
                 if Product_Amount > Payment_Amount:     # 收货后仅支付订金
-                    Amount_of_Loss = Product_Amount - Payment_Amount # 计算损失金额
+                    results[Consumer_ID][5] += float(Product_Amount) - float(Payment_Amount) # 计算损失金额
                     results[Consumer_ID][3] += 1
                 if Payment_Amount != 0 and Shipping_Time == '9999':     # 付款不发货
                     results[Producer_ID][4] += 1
@@ -56,7 +56,7 @@ def Count(file):
                 if Return_Time == '9999' and Refund_Amount == Product_Amount:   # 仅退款不退货
                     results[Consumer_ID][1] += 1
                 if Product_Amount > Payment_Amount:     # 收货后仅支付订金
-                    Amount_of_Loss = Product_Amount - Payment_Amount
+                    results[Consumer_ID][5] += float(Product_Amount) - float(Payment_Amount)
                     results[Consumer_ID][3] += 1
                 if Payment_Amount != 0 and Shipping_Time == '9999':     # 付款不发货
                     results[Producer_ID][4] += 1
@@ -79,5 +79,9 @@ def Count(file):
 
 
 if __name__ == '__main__':
-    file = 'orders_JD.csv'
-    Count(file)
+    file1 = 'orders_JD.csv'
+    Count(file1)
+    file2 = 'orders_JD_Month.csv'
+    Count(file2)
+    file3 = 'orders_JD_Half_Year.csv'
+    Count(file3)

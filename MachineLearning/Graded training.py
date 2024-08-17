@@ -10,10 +10,17 @@ from imblearn.pipeline import Pipeline as ImbPipeline
 
 #加载数据
 data = pd.read_csv('count_orders_JD.csv')
-# 暂时还未生成
 data2 = pd.read_csv('count_orders_JD_Month.csv')
 data3 = pd.read_csv('count_orders_JD_Half_Year.csv')
-'''
+
+#基础恶意行为分数
+data['Refund_Only_Score'] = np.log(data['Refund_Only_Count'] + np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Refund_Only_Count'] / data['Total_Count']))
+data['Rental_Not_Returned_Score'] = np.log(50 * data['Rental_Not_Returned_Count'] + np.exp(1) * np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Rental_Not_Returned_Count'] / data['Total_Count']))
+data['Partial_Payment_After_Receipt_Score'] = np.log(data['Partial_Payment_After_Receipt_Count'] + np.exp(1) * np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Partial_Payment_After_Receipt_Count'] / data['Total_Count']))
+data['Payment_Without_Delivery_Score'] = np.log(data['Payment_Without_Delivery_Count'] + np.exp(data['Amount_of_Loss']) + 50 * np.exp(1) * np.exp(data['Payment_Without_Delivery_Count'] / data['Total_Count']))
+data['Total_Score'] = data['Refund_Only_Score'] + data['Rental_Not_Returned_Score'] + data['Partial_Payment_After_Receipt_Score'] + data['Payment_Without_Delivery_Score']
+
+
 #基础恶意行为分数
 data2['Refund_Only_Score'] = np.log(data['Refund_Only_Count'] + np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Refund_Only_Count'] / data['Total_Count']))
 data2['Rental_Not_Returned_Score'] = np.log(50 * data['Rental_Not_Returned_Count'] + np.exp(1) * np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Rental_Not_Returned_Count'] / data['Total_Count']))
@@ -28,15 +35,6 @@ data3['Partial_Payment_After_Receipt_Score'] = np.log(data['Partial_Payment_Afte
 data3['Payment_Without_Delivery_Score'] = np.log(data['Payment_Without_Delivery_Count'] + np.exp(data['Amount_of_Loss']) + 50 * np.exp(1) * np.exp(data['Payment_Without_Delivery_Count'] / data['Total_Count']))
 data3['Total_Score'] = data['Refund_Only_Score'] + data['Rental_Not_Returned_Score'] + data['Partial_Payment_After_Receipt_Score'] + data['Payment_Without_Delivery_Score']
 
-'''
-
-
-#基础恶意行为分数
-data['Refund_Only_Score'] = np.log(data['Refund_Only_Count'] + np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Refund_Only_Count'] / data['Total_Count']))
-data['Rental_Not_Returned_Score'] = np.log(50 * data['Rental_Not_Returned_Count'] + np.exp(1) * np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Rental_Not_Returned_Count'] / data['Total_Count']))
-data['Partial_Payment_After_Receipt_Score'] = np.log(data['Partial_Payment_After_Receipt_Count'] + np.exp(1) * np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Partial_Payment_After_Receipt_Count'] / data['Total_Count']))
-data['Payment_Without_Delivery_Score'] = np.log(data['Payment_Without_Delivery_Count'] + np.exp(data['Amount_of_Loss']) + 50 * np.exp(1) * np.exp(data['Payment_Without_Delivery_Count'] / data['Total_Count']))
-data['Total_Score'] = data['Refund_Only_Score'] + data['Rental_Not_Returned_Score'] + data['Partial_Payment_After_Receipt_Score'] + data['Payment_Without_Delivery_Score']
 
 
 #时间序列特征
