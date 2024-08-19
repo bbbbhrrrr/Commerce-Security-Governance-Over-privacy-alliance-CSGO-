@@ -130,7 +130,7 @@ if __name__ == "__main__":
     setup_logging()
 
     #配置参与方和SPU
-    #各个参与方需要去共享数据不同的特征（各平台应用）数据集的不同列分配给 parties 列表
+    #各个参与方需要去共享数据不同的特征（各平台应用）数据集的不同列分配给 parties 列表 
     parties = [' ', ]  #示例参与方(需要进一步明确数据格式)
     spu = init_debug(parties)  # 或者使用生产模式的init_prod函数
 
