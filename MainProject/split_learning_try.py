@@ -130,6 +130,7 @@ if __name__ == "__main__":
     setup_logging()
 
     #配置参与方和SPU
+    #各个参与方需要去共享数据不同的特征（各平台应用）数据集的不同列分配给 parties 列表 
     parties = [' ', ]  #示例参与方(需要进一步明确数据格式)
     spu = init_debug(parties)  # 或者使用生产模式的init_prod函数
 
@@ -137,6 +138,7 @@ if __name__ == "__main__":
     df = pd.read_csv('count_orders_JD.csv')  #数据集
     feature_cols = ['Total_Count', 'Refund_Only_Count', 'Rental_Not_Returned_Count',
                     'Partial_Payment_After_Receipt_Count', 'Payment_Without_Delivery_Count', 'Amount_of_Loss']
+    #需要在数据源更新更新的一列用于最后的评判输出，用户信誉情况评分原始情况吧
     label_col = ' '  #可以根据实际情况选择分类标签(结合用户信誉情况评分？)
 
     # 训练模型
