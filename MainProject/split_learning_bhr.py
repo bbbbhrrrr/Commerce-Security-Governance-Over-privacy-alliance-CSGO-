@@ -1,0 +1,210 @@
+import secretflow as sf
+import pandas as pd
+from secretflow.data.split import train_test_split
+from secretflow.ml.nn import SLModel
+from secretflow.preprocessing.scaler import MinMaxScaler
+from secretflow.preprocessing.encoder import LabelEncoder
+
+# 拆分学习，传入 main 中的 spu ，输入数据，进行拆分学习
+# 参考 https://www.secretflow.org.cn/zh-CN/docs/secretflow/main/tutorial/Split_Learning_for_bank_marketing
+
+import secretflow as sf
+import matplotlib.pyplot as plt
+import pandas as pd
+from secretflow.utils.simulation.datasets import dataset
+from secretflow.data.split import train_test_split
+from secretflow.ml.nn import SLModel
+from secretflow.utils.simulation.datasets import load_bank_marketing
+from secretflow.preprocessing.scaler import MinMaxScaler
+from secretflow.preprocessing.encoder import LabelEncoder
+from secretflow.data.vertical import read_csv
+from secretflow.security.privacy import DPStrategy, LabelDP
+from secretflow.security.privacy.mechanism.tensorflow import GaussianEmbeddingDP
+
+# 初始化
+sf.init(['alice', 'bob'], address='local')
+alice, bob = sf.PYU('alice'), sf.PYU('bob')
+
+path_dict = {
+    alice: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/level_orders_JD.csv',
+    bob: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/level_orders_TB.csv',
+}
+
+# Prepare the SPU device
+spu = sf.SPU(sf.utils.testing.cluster_def(['alice', 'bob']))
+
+vdf = read_csv(path_dict, spu=spu, keys='ID', drop_keys="ID")
+
+print(vdf)
+
+label_JD = vdf["level_JD"]
+label_TB = vdf["level_TB"]
+
+
+data = vdf.drop(columns=["level_JD", "level_TB"])
+
+print(f"label_JD = {type(label_JD)},\n label_TB= {type(label_TB)},\n data= {type(data)}")
+
+scaler = MinMaxScaler()
+data = scaler.fit_transform(data)
+
+encoder = LabelEncoder()
+encoder = LabelEncoder()
+data['Total_Count_JD'] = encoder.fit_transform(data['Total_Count_JD'])
+data['Total_Count_TB'] = encoder.fit_transform(data['Total_Count_TB'])
+data['Refund_Only_Count_JD']= encoder.fit_transform(data['Refund_Only_Count_JD'])
+data['Refund_Only_Count_TB']= encoder.fit_transform(data['Refund_Only_Count_TB'])
+data['Rental_Not_Returned_Count_JD']= encoder.fit_transform(data['Rental_Not_Returned_Count_JD'])
+data['Rental_Not_Returned_Count_TB']= encoder.fit_transform(data['Rental_Not_Returned_Count_TB'])
+data['Partial_Payment_After_Receipt_Count_JD']= encoder.fit_transform(data['Partial_Payment_After_Receipt_Count_JD'])
+data['Partial_Payment_After_Receipt_Count_TB']= encoder.fit_transform(data['Partial_Payment_After_Receipt_Count_TB'])
+data['Payment_Without_Delivery_Count_JD']= encoder.fit_transform(data['Payment_Without_Delivery_Count_JD'])
+data['Payment_Without_Delivery_Count_TB']= encoder.fit_transform(data['Payment_Without_Delivery_Count_TB'])
+data['Amount_of_Loss_JD']= encoder.fit_transform(data['Amount_of_Loss_JD'])
+data['Amount_of_Loss_TB']= encoder.fit_transform(data['Amount_of_Loss_TB'])
+label_JD = encoder.fit_transform(label_JD)
+label_TB = encoder.fit_transform(label_TB)
+
+scaler = MinMaxScaler()
+
+data = scaler.fit_transform(data)
+
+
+random_state = 1234
+train_data, test_data = train_test_split(
+    data, train_size=0.8, random_state=random_state
+)
+train_label, test_label = train_test_split(
+    label_JD, train_size=0.8, random_state=random_state
+)
+
+
+def create_base_model(input_dim, output_dim, name='base_model'):
+    # Create model
+    def create_model():
+        from tensorflow import keras
+        import keras.layers as layers
+        import tensorflow as tf
+
+        model = keras.Sequential(
+            [
+                keras.Input(shape=input_dim),
+                layers.Dense(100, activation="relu"),
+                layers.Dense(output_dim, activation="relu"),
+            ]
+        )
+        # Compile model
+        model.summary()
+        model.compile(
+            loss='binary_crossentropy',
+            optimizer='adam',
+            metrics=["accuracy", tf.keras.metrics.AUC()],
+        )
+        return model
+
+    return create_model
+
+def create_fuse_model(input_dim, output_dim, party_nums, name='fuse_model'):
+    def create_model():
+        from tensorflow import keras
+        import keras.layers as layers
+        import tensorflow as tf
+
+        # input
+        input_layers = []
+        for i in range(party_nums):
+            input_layers.append(
+                keras.Input(
+                    input_dim,
+                )
+            )
+
+        merged_layer = layers.concatenate(input_layers)
+        fuse_layer = layers.Dense(64, activation='relu')(merged_layer)
+        output = layers.Dense(output_dim, activation='sigmoid')(fuse_layer)
+
+        model = keras.Model(inputs=input_layers, outputs=output)
+        model.summary()
+
+        model.compile(
+            loss='binary_crossentropy',
+            optimizer='adam',
+            metrics=["accuracy", tf.keras.metrics.AUC()],
+        )
+        return model
+
+    return create_model
+
+def train(parties:list, spu:sf.SPU):
+    members = []
+    for party in parties:
+        members.append(sf.PYU(party))
+    
+    df = pd.read_csv('data.csv')
+
+    # 处理数据，构建垂直联邦表
+
+    # 创建拆分学习模型
+
+    sl_model = SLModel()
+
+    return sl_model
+
+# prepare model
+hidden_size = 64
+
+model_base_alice = create_base_model(8, hidden_size)
+model_base_bob = create_base_model(7, hidden_size)
+
+model_base_alice()
+model_base_bob()
+
+model_fuse = create_fuse_model(input_dim=hidden_size, party_nums=2, output_dim=4)
+
+model_fuse()
+
+base_model_dict = {alice: model_base_alice, bob: model_base_bob}
+
+
+
+# Define DP operations
+train_batch_size = 128
+gaussian_embedding_dp = GaussianEmbeddingDP(
+    noise_multiplier=0.5,
+    l2_norm_clip=1.0,
+    batch_size=train_batch_size,
+    num_samples=train_data.values.partition_shape()[alice][0],
+    is_secure_generator=False,
+)
+label_dp = LabelDP(eps=64.0)
+dp_strategy_alice = DPStrategy(label_dp=label_dp)
+dp_strategy_bob = DPStrategy(embedding_dp=gaussian_embedding_dp)
+dp_strategy_dict = {alice: dp_strategy_alice, bob: dp_strategy_bob}
+dp_spent_step_freq = 10
+
+sl_model = SLModel(
+    base_model_dict=base_model_dict,
+    device_y=alice,
+    model_fuse=model_fuse,
+    dp_strategy_dict=dp_strategy_dict,
+)
+
+print(sf.reveal(train_data.partitions[alice].data), sf.reveal(
+    train_label.partitions[alice].data
+))
+
+print(sf.reveal(test_data.partitions[alice].data), sf.reveal(
+    test_label.partitions[alice].data
+))
+
+history = sl_model.fit(
+    train_data,
+    train_label,
+    validation_data=(test_data, test_label),
+    epochs=10,
+    batch_size=train_batch_size,
+    shuffle=True,
+    verbose=1,
+    validation_freq=1,
+    dp_spent_step_freq=dp_spent_step_freq,
+)

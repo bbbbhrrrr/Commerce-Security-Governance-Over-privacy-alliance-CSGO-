@@ -9,9 +9,13 @@ from imblearn.over_sampling import SMOTE
 from imblearn.pipeline import Pipeline as ImbPipeline
 
 #加载数据
-data = pd.read_csv('count_orders_JD.csv')
-data2 = pd.read_csv('count_orders_JD_Month.csv')
-data3 = pd.read_csv('count_orders_JD_Half_Year.csv')
+data = pd.read_csv('/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/MachineLearning/count_orders_JD.csv')
+
+data2 = pd.read_csv('/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/MachineLearning/count_orders_JD_Half_Year.csv')
+
+data3 = pd.read_csv('/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/MachineLearning/count_orders_JD_Month.csv')
+
+
 
 #基础恶意行为分数
 data['Refund_Only_Score'] = np.log(data['Refund_Only_Count'] + np.exp(data['Amount_of_Loss']) + np.exp(1) * np.exp(data['Refund_Only_Count'] / data['Total_Count']))
@@ -38,24 +42,31 @@ data3['Total_Score'] = data['Refund_Only_Score'] + data['Rental_Not_Returned_Sco
 
 
 #时间序列特征
-# data['Total_Score_Rolling_Month'] = data['Total_Score'].rolling(window=100).mean()
-# data['Total_Score_Rolling_Half_Year'] = data['Total_Score'].rolling(window=1000).mean()
+data['Total_Score_Rolling_Month'] = data['Total_Score'].rolling(window=100).mean()
+data['Total_Score_Rolling_Half_Year'] = data['Total_Score'].rolling(window=1000).mean()
 
 
 
 
-#分级规则手动创建标签
-def classify_user(row, row_month, row_half_year):
+# 分级规则手动创建标签
+def classify_user(row, data2, data3):
+    row_month = data2.loc[row.name]
+    row_half_year = data3.loc[row.name]
+    
     if row['Total_Score_Rolling_Month'] > 10:
         return '封禁用户'
-    elif row['Total_Count'] > 100 and row_month['Total_Score'] / row['Total_Count'] > 0.05 or row['Total_Count'] <= 100 and row_month['Total_Score'] >= 5:
+    elif (row['Total_Count'] > 100 and row_month['Total_Score'] / row['Total_Count'] > 0.05) or (row['Total_Count'] <= 100 and row_month['Total_Score'] >= 5):
         return '恶意用户'
-    elif row['Total_Count'] > 100 and row_month['Total_Score'] / row['Total_Count'] > 0.01 or row['Total_Count'] <= 100 and row_month['Total_Score'] < 5:
+    elif (row['Total_Count'] > 100 and row_month['Total_Score'] / row['Total_Count'] > 0.01) or (row['Total_Count'] <= 100 and row_month['Total_Score'] < 5):
         return '风险用户'
-    elif row['Total_Count'] > 10 and row['Total_Score'] == 0 or row['Total_Count'] > 4 and row_month['Total_Score'] == 0 or row['Total_Count'] >= 15 and row_half_year['Total_Score'] == 0:
+    elif (row['Total_Count'] > 10 and row['Total_Score'] == 0) or (row['Total_Count'] > 4 and row_month['Total_Score'] == 0) or (row['Total_Count'] >= 15 and row_half_year['Total_Score'] == 0):
         return '优先用户'
     else:
         return '普通用户'
+
+data['User_Category'] = data.apply(classify_user, args=(data2, data3), axis=1)  # 将分类结果添加到数据集中
+
+data['User_Category'] = data.apply(classify_user, args=(data2, data3), axis=1)  # 将分类结果添加到数据集中
 
 data['User_Category'] = data.apply(classify_user, args=(data2, data3), axis=1)  #将分类结果添加到数据集中
 
@@ -65,6 +76,15 @@ labels = data['User_Category']
 
 #数据集划分
 X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=42, stratify=labels)
+
+#将训练集与测试集保存为CSV文件
+X_train.to_csv('X_train.csv', index=False)
+X_test.to_csv('X_test.csv', index=False)
+y_train.to_csv('y_train.csv', index=False)
+y_test.to_csv('y_test.csv', index=False)
+
+
+
 
 #使用SMOTE处理不平衡数据
 smote = SMOTE(random_state=42)

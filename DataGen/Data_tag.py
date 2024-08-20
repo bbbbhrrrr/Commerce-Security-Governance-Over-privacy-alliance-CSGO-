@@ -133,31 +133,18 @@ def Cale_Total(data):
 
 
 if __name__ == '__main__':
-    file1 = 'orders_JD.csv'
+    file1 = 'orders_TB.csv'
     Count(file1)
-    file2 = 'orders_JD_Month.csv'
-    Count(file2)
-    file3 = 'orders_JD_Half_Year.csv'
-    Count(file3)
 
     # 加载数据
-    data1 = pd.read_csv('count_orders_JD.csv')              # 基础数据
-    data2 = pd.read_csv('count_orders_JD_Month.csv')        # 月数据
-    data3 = pd.read_csv('count_orders_JD_Half_Year.csv')    # 半年数据
+    data1 = pd.read_csv('count_orders_TB.csv')
 
     # 基础恶意行为分数
     data1 = Cale_Total(data1)
-    # 月计基础恶意行为分数
-    data2 = Cale_Total(data2)
-    # 半年计基础恶意行为分数
-    data3 = Cale_Total(data3)
 
     print(data1)
-    print(data2)
-    print(data3)
-
-    data1['level'] = data1.apply(classify_user, args=(
-        data2, data3), axis=1)  # 将分类结果添加到数据集中
+    data1['level'] = data1.apply(
+        lambda row: classify_user(row, data1, data1), axis=1)
 
     # 需要删除的列列表
     columns_to_drop = [
