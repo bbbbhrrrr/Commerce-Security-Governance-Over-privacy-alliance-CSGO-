@@ -20,6 +20,9 @@ from secretflow.preprocessing.encoder import LabelEncoder
 from secretflow.data.vertical import read_csv
 from secretflow.security.privacy import DPStrategy, LabelDP
 from secretflow.security.privacy.mechanism.tensorflow import GaussianEmbeddingDP
+from secretflow.preprocessing.encoder import OneHotEncoder
+
+
 
 # 初始化
 sf.init(['alice', 'bob'], address='local')
@@ -35,6 +38,7 @@ spu = sf.SPU(sf.utils.testing.cluster_def(['alice', 'bob']))
 
 vdf = read_csv(path_dict, spu=spu, keys='ID', drop_keys="ID")
 
+
 print(vdf)
 
 label_JD = vdf["level_JD"]
@@ -43,12 +47,15 @@ label_TB = vdf["level_TB"]
 
 data = vdf.drop(columns=["level_JD", "level_TB"])
 
+print(vdf.columns)
+
+print(data.columns)
+
 print(f"label_JD = {type(label_JD)},\n label_TB= {type(label_TB)},\n data= {type(data)}")
 
 scaler = MinMaxScaler()
 data = scaler.fit_transform(data)
 
-encoder = LabelEncoder()
 encoder = LabelEncoder()
 data['Total_Count_JD'] = encoder.fit_transform(data['Total_Count_JD'])
 data['Total_Count_TB'] = encoder.fit_transform(data['Total_Count_TB'])
@@ -62,12 +69,19 @@ data['Payment_Without_Delivery_Count_JD']= encoder.fit_transform(data['Payment_W
 data['Payment_Without_Delivery_Count_TB']= encoder.fit_transform(data['Payment_Without_Delivery_Count_TB'])
 data['Amount_of_Loss_JD']= encoder.fit_transform(data['Amount_of_Loss_JD'])
 data['Amount_of_Loss_TB']= encoder.fit_transform(data['Amount_of_Loss_TB'])
+
+encoder = OneHotEncoder()
 label_JD = encoder.fit_transform(label_JD)
 label_TB = encoder.fit_transform(label_TB)
+
 
 scaler = MinMaxScaler()
 
 data = scaler.fit_transform(data)
+
+print("===============this is data=====================")
+print(data)
+print("================this is data====================")
 
 
 random_state = 1234
@@ -96,7 +110,7 @@ def create_base_model(input_dim, output_dim, name='base_model'):
         # Compile model
         model.summary()
         model.compile(
-            loss='binary_crossentropy',
+            loss='categorical_crossentropy',
             optimizer='adam',
             metrics=["accuracy", tf.keras.metrics.AUC()],
         )
@@ -127,7 +141,7 @@ def create_fuse_model(input_dim, output_dim, party_nums, name='fuse_model'):
         model.summary()
 
         model.compile(
-            loss='binary_crossentropy',
+            loss='categorical_crossentropy',
             optimizer='adam',
             metrics=["accuracy", tf.keras.metrics.AUC()],
         )
@@ -135,36 +149,21 @@ def create_fuse_model(input_dim, output_dim, party_nums, name='fuse_model'):
 
     return create_model
 
-def train(parties:list, spu:sf.SPU):
-    members = []
-    for party in parties:
-        members.append(sf.PYU(party))
-    
-    df = pd.read_csv('data.csv')
-
-    # 处理数据，构建垂直联邦表
-
-    # 创建拆分学习模型
-
-    sl_model = SLModel()
-
-    return sl_model
-
 # prepare model
 hidden_size = 64
 
-model_base_alice = create_base_model(8, hidden_size)
-model_base_bob = create_base_model(7, hidden_size)
+model_base_alice = create_base_model(6, hidden_size)
+model_base_bob = create_base_model(6, hidden_size)
 
 model_base_alice()
 model_base_bob()
+
 
 model_fuse = create_fuse_model(input_dim=hidden_size, party_nums=2, output_dim=4)
 
 model_fuse()
 
 base_model_dict = {alice: model_base_alice, bob: model_base_bob}
-
 
 
 # Define DP operations
@@ -189,13 +188,13 @@ sl_model = SLModel(
     dp_strategy_dict=dp_strategy_dict,
 )
 
-print(sf.reveal(train_data.partitions[alice].data), sf.reveal(
-    train_label.partitions[alice].data
-))
-
-print(sf.reveal(test_data.partitions[alice].data), sf.reveal(
+sf.reveal(test_data.partitions[alice].data), sf.reveal(
     test_label.partitions[alice].data
-))
+)
+
+sf.reveal(train_data.partitions[alice].data), sf.reveal(
+    train_label.partitions[alice].data
+)
 
 history = sl_model.fit(
     train_data,
@@ -208,3 +207,32 @@ history = sl_model.fit(
     validation_freq=1,
     dp_spent_step_freq=dp_spent_step_freq,
 )
+
+# Plot the change of loss during training
+plt.plot(history['train_loss'])
+plt.plot(history['val_loss'])
+plt.title('Model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Val'], loc='upper right')
+plt.show()
+
+# Plot the change of accuracy during training
+plt.plot(history['train_accuracy'])
+plt.plot(history['val_accuracy'])
+plt.title('Model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Val'], loc='upper left')
+plt.show()
+
+# Plot the Area Under Curve(AUC) of loss during training
+plt.plot(history['train_auc_1'])
+plt.plot(history['val_auc_1'])
+plt.title('Model Area Under Curve')
+plt.ylabel('Area Under Curve')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Val'], loc='upper left')
+plt.show()
+
+global_metric = sl_model.evaluate(test_data, test_label, batch_size=128)
