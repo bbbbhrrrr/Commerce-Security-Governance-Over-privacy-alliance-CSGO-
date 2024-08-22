@@ -109,7 +109,7 @@ def classify_user(data_row, data_month, data_half_year):
          (total_count >= 15 and half_year_score == 0 and total_score == 0):
         return 1  # 优先用户
     elif (total_count > 100 and month_score / total_count > 0.01) or \
-         (total_count <= 100 and month_score < 5):
+         (total_count <= 100 and month_score < 5 and total_score != 0):
         return 3  # 风险用户
     elif (total_count > 100 and month_score / total_count > 0.05) or \
          (total_count <= 100 and month_score >= 5):
