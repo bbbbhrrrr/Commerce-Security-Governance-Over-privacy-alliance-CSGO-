@@ -201,3 +201,6 @@ ps：数据的噪声预处理？
 初期找一人研究
 
 ## 额度设置 all 8.20
+## 项目书
+使用overleaf编辑
+https://cn.overleaf.com/6159414932zbhbptgsfjds#1296a8
