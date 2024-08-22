@@ -132,19 +132,22 @@ def Cale_Total(data):
     return data
 
 
-if __name__ == '__main__':
-    file1 = 'orders_TB.csv'
+def Level(file1,file2,file3):
     Count(file1)
+    Count(file2)
+    Count(file3)
+    # 加载
 
-    # 加载数据
-    data1 = pd.read_csv('count_orders_TB.csv')
+    data1 = pd.read_csv('count_' + file1)
+    data2 = pd.read_csv('count_' + file2)
+    data3 = pd.read_csv('count_' + file3)
 
     # 基础恶意行为分数
     data1 = Cale_Total(data1)
+    data2 = Cale_Total(data2)
+    data3 = Cale_Total(data3)
 
-    print(data1)
-    data1['level'] = data1.apply(
-        lambda row: classify_user(row, data1, data1), axis=1)
+    data1['level'] = data1.apply(classify_user, args=(data2, data3), axis=1)
 
     # 需要删除的列列表
     columns_to_drop = [
@@ -160,3 +163,18 @@ if __name__ == '__main__':
 
     # 保存数据集
     data_to_save.to_csv('level_' + file1, index=False)
+
+
+    # data1['level'] = data1.apply(
+    #     lambda row: classify_user(row, data1, data1), axis=1)
+
+
+if __name__ == '__main__':
+    file1 = 'orders_TB.csv'
+    file2 = 'orders_TB_Month.csv'
+    file3 = 'orders_TB_Half_Year.csv'
+    Level(file1,file2,file3)
+    file4 = 'orders_JD.csv'
+    file5 = 'orders_JD_Month.csv'
+    file6 = 'orders_JD_Half_Year.csv'
+    Level(file4,file5,file6)
