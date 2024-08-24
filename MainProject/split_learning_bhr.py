@@ -21,7 +21,7 @@ from secretflow.data.vertical import read_csv
 from secretflow.security.privacy import DPStrategy, LabelDP
 from secretflow.security.privacy.mechanism.tensorflow import GaussianEmbeddingDP
 from secretflow.preprocessing.encoder import OneHotEncoder
-
+import tensorflow as tf
 
 
 # 初始化
@@ -41,6 +41,8 @@ vdf = read_csv(path_dict, spu=spu, keys='ID', drop_keys="ID")
 
 print(vdf)
 
+label_JD_vd = vdf["level_JD"]
+
 label_JD = vdf["level_JD"]
 label_TB = vdf["level_TB"]
 
@@ -53,8 +55,6 @@ print(data.columns)
 
 print(f"label_JD = {type(label_JD)},\n label_TB= {type(label_TB)},\n data= {type(data)}")
 
-scaler = MinMaxScaler()
-data = scaler.fit_transform(data)
 
 encoder = LabelEncoder()
 data['Total_Count_JD'] = encoder.fit_transform(data['Total_Count_JD'])
@@ -74,9 +74,11 @@ encoder = OneHotEncoder()
 label_JD = encoder.fit_transform(label_JD)
 label_TB = encoder.fit_transform(label_TB)
 
+print(f"label_JD = {type(label_JD)},\n label_TB= {type(label_TB)},\n data= {type(data)}")
+
+
 
 scaler = MinMaxScaler()
-
 data = scaler.fit_transform(data)
 
 print("===============this is data=====================")
@@ -86,10 +88,10 @@ print("================this is data====================")
 
 random_state = 1234
 train_data, test_data = train_test_split(
-    data, train_size=0.8, random_state=random_state
+    data, train_size=0.85, random_state=random_state
 )
 train_label, test_label = train_test_split(
-    label_JD, train_size=0.8, random_state=random_state
+    label_JD, train_size=0.85, random_state=random_state
 )
 
 
@@ -167,7 +169,7 @@ base_model_dict = {alice: model_base_alice, bob: model_base_bob}
 
 
 # Define DP operations
-train_batch_size = 128
+train_batch_size = 10
 gaussian_embedding_dp = GaussianEmbeddingDP(
     noise_multiplier=0.5,
     l2_norm_clip=1.0,
@@ -208,6 +210,35 @@ history = sl_model.fit(
     dp_spent_step_freq=dp_spent_step_freq,
 )
 
+# predict the test data
+y_pred = sl_model.predict(test_data)
+print(f"type(y_pred) = {type(y_pred)}")
+
+print(sf.reveal(y_pred))
+
+# 选取预测结果中的最大值为1，其余为0
+tensor = sf.reveal(y_pred)
+# 将预测结果转换为 tensor张量
+tensor = tf.convert_to_tensor(tensor, dtype=tf.float32)
+# 将 tensor 转换为4列的形式
+tensor = tf.reshape(tensor, [-1, 4])
+
+# 找到每行最大值的索引
+max_indices = tf.argmax(tensor, axis=1)
+# 将索引转换为 one-hot 编码
+predicted_one_hot = tf.one_hot(max_indices, depth=tensor.shape[1])
+
+# 打印预测结果和真实标签，作为对比
+print(f"predicted_one_hot = {predicted_one_hot}")
+
+print(sf.reveal(    test_label.partitions[alice].data))
+
+# Evaluate the model
+evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
+print(evaluator)
+
+
+
 # Plot the change of loss during training
 plt.plot(history['train_loss'])
 plt.plot(history['val_loss'])
@@ -235,4 +266,6 @@ plt.xlabel('Epoch')
 plt.legend(['Train', 'Val'], loc='upper left')
 plt.show()
 
-global_metric = sl_model.evaluate(test_data, test_label, batch_size=128)
+
+
+
