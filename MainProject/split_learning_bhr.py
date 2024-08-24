@@ -22,15 +22,15 @@ from secretflow.security.privacy import DPStrategy, LabelDP
 from secretflow.security.privacy.mechanism.tensorflow import GaussianEmbeddingDP
 from secretflow.preprocessing.encoder import OneHotEncoder
 import tensorflow as tf
-
+import numpy as np
 
 # 初始化
 sf.init(['alice', 'bob'], address='local')
 alice, bob = sf.PYU('alice'), sf.PYU('bob')
 
 path_dict = {
-    alice: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/level_orders_JD.csv',
-    bob: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/level_orders_TB.csv',
+    alice: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_JD.csv',
+    bob: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_TB.csv'
 }
 
 # Prepare the SPU device
@@ -161,7 +161,7 @@ model_base_alice()
 model_base_bob()
 
 
-model_fuse = create_fuse_model(input_dim=hidden_size, party_nums=2, output_dim=4)
+model_fuse = create_fuse_model(input_dim=hidden_size, party_nums=2, output_dim=5)
 
 model_fuse()
 
@@ -169,7 +169,7 @@ base_model_dict = {alice: model_base_alice, bob: model_base_bob}
 
 
 # Define DP operations
-train_batch_size = 10
+train_batch_size = 1000
 gaussian_embedding_dp = GaussianEmbeddingDP(
     noise_multiplier=0.5,
     l2_norm_clip=1.0,
@@ -216,12 +216,29 @@ print(f"type(y_pred) = {type(y_pred)}")
 
 print(sf.reveal(y_pred))
 
-# 选取预测结果中的最大值为1，其余为0
-tensor = sf.reveal(y_pred)
+data = sf.reveal(y_pred)
+
 # 将预测结果转换为 tensor张量
+
+# 找到最大行数
+max_rows = max(tensor.shape[0] for tensor in data)
+
+# 填充或裁剪数据，使其形状一致
+padded_data = []
+for tensor in data:
+    if tensor.shape[0] < max_rows:
+        # 填充
+        padding = np.zeros((max_rows - tensor.shape[0], tensor.shape[1]), dtype=np.float32)
+        padded_tensor = np.vstack((tensor, padding))
+    else:
+        # 裁剪
+        padded_tensor = tensor[:max_rows, :]
+    padded_data.append(padded_tensor)
+
+# 将数据转换为TensorFlow张量
 tensor = tf.convert_to_tensor(tensor, dtype=tf.float32)
-# 将 tensor 转换为4列的形式
-tensor = tf.reshape(tensor, [-1, 4])
+# 将 tensor 转换为5列的形式
+tensor = tf.reshape(tensor, [-1, 5])
 
 # 找到每行最大值的索引
 max_indices = tf.argmax(tensor, axis=1)
@@ -231,7 +248,7 @@ predicted_one_hot = tf.one_hot(max_indices, depth=tensor.shape[1])
 # 打印预测结果和真实标签，作为对比
 print(f"predicted_one_hot = {predicted_one_hot}")
 
-print(sf.reveal(    test_label.partitions[alice].data))
+print(sf.reveal(test_label.partitions[alice].data))
 
 # Evaluate the model
 evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
