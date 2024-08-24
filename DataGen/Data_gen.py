@@ -20,7 +20,7 @@ import json
 import random
 import uuid
 from datetime import datetime, timedelta
-
+from tqdm import tqdm
 
 def str_to_datetime(date_str):
     return datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
@@ -319,19 +319,22 @@ class Payment_Plantform:
 
 # 示例使用
 
-# 随机生成100个身份证号ID，存储在列表中
-ID_list = [generate_random_id() for _ in range(100)]
+# 随机生成20000个身份证号ID，存储在列表中
+ID_list = [generate_random_id() for _ in range(20000)]
 
-# 随机生成100个消费者和100个生产者
-consumers = [Consumer(ID_list[i]) for i in range(100)]
-producers = [Producer(ID_list[i]) for i in range(100)]
+# 随机生成20000个消费者和20000个生产者
+consumers = [Consumer(ID_list[i]) for i in range(20000)]
+producers = [Producer(ID_list[i]) for i in range(20000)]
 
 
 # 生成订单
 order_gen_TB = GenOrder("orders_TB.csv", "TB")
-order_gen_JD = GenOrder("orders_JD.csv", "JD")
-
 # 生成长期订单
+order_gen_TB_Month = GenOrder("orders_TB_Month.csv", "TB")
+order_gen_TB_Half_Year = GenOrder("orders_TB_Half_Year.csv", "TB")
+
+
+order_gen_JD = GenOrder("orders_JD.csv", "JD")
 order_gen_JD_Month = GenOrder("orders_JD_Month.csv", "JD")
 order_gen_JD_Half_Year = GenOrder("orders_JD_Half_Year.csv", "JD")
 
@@ -462,190 +465,281 @@ def Chose_ID(start, end):                     # 生成两个不同的ID
 # print(random.choices(act_type))
 
 
-for _ in range(400):  # 生成400个随机订单
-    id1, id2 = Chose_ID(0, 30)
+for _ in tqdm(range(100000)):  # 生成100000个随机订单
+    id1, id2 = Chose_ID(0,5000)
     order_gen_TB.generate_order(
         consumers[id1],
         producers[id2],
-        order_type=random.choice(act_type)[0],
+        order_type=random.choices(act_type, weights=[0.6, 0.1, 0.1, 0.2])[0],
     )  # 淘宝订单
-    id1, id2 = Chose_ID(0, 30)
+    id1, id2 = Chose_ID(0,5000)
+    order_gen_TB_Month.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type=random.choices(act_type, weights=[0.8, 0.05, 0.05, 0.1])[0],
+    )  # 淘宝月订单
+    id1, id2 = Chose_ID(0,5000)
+    order_gen_TB_Half_Year.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type=random.choices(
+            act_type, weights=[0.9, 0.02, 0.03, 0.05])[0],
+    )  # 淘宝半年订单
+    id1, id2 = Chose_ID(0,5000)
     order_gen_JD.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(act_type, weights=[0.6, 0.1, 0.1, 0.2])[0],
     )  # 京东订单
-    id1, id2 = Chose_ID(0, 30)
+    id1, id2 = Chose_ID(0,5000)
     order_gen_JD_Month.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(act_type, weights=[0.8, 0.05, 0.05, 0.1])[0],
     )  # 京东月订单
-    id1, id2 = Chose_ID(0, 30)
+    id1, id2 = Chose_ID(0,5000)
     order_gen_JD_Half_Year.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(
             act_type, weights=[0.9, 0.02, 0.03, 0.05])[0],
     )  # 京东半年订单
-    id1, id2 = Chose_ID(0, 30)
-    order_gen_PDD.generate_order(
-        consumers[id1],
-        producers[id2],
-        order_type=random.choice(act_type)[0],
-    )  # 拼多多订单
-    id1, id2 = Chose_ID(0, 30)
-    order_gen_lease_platform.generate_order(
-        consumers[id1],
-        producers[id2],
-        order_type=random.choice(lease_act_type)[0],
-    )  # 租赁平台订单
-    id1, id2 = Chose_ID(0, 30)
-    order_gen_XY.generate_order(
-        consumers[id1],
-        producers[id2],
-        order_type=random.choice(act_type)[0],
-    )  # XY订单
+    # id1, id2 = Chose_ID(0,5000)
+    # order_gen_PDD.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type=random.choice(act_type)[0],
+    # )  # 拼多多订单
+    # id1, id2 = Chose_ID(0,5000)
+    # order_gen_lease_platform.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type=random.choice(lease_act_type)[0],
+    # )  # 租赁平台订单
+    # id1, id2 = Chose_ID(0,5000)
+    # order_gen_XY.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type=random.choice(act_type)[0],
+    # )  # XY订单
 
 
-for i in range(400):    # 生成400个坏订单
-    id1, id2 = Chose_ID(31, 60)
+for _ in tqdm(range(100000)):    # 生成100000个坏订单
+    id1, id2 = Chose_ID(5000,10000)
     order_gen_TB.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choice(bad_act_type)[0],
     )  # 淘宝订单
-    id1, id2 = Chose_ID(31, 60)
+    id1, id2 = Chose_ID(5000,10000)
+    order_gen_TB_Month.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type=random.choice(bad_act_type)[0],
+    )  # 淘宝月订单
+    id1, id2 = Chose_ID(5000,10000)
+    order_gen_TB_Half_Year.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type=random.choice(bad_act_type)[0],
+    )  # 淘宝半年订单
+    id1, id2 = Chose_ID(5000,10000)
     order_gen_JD.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(bad_act_type)[0],
     )  # 京东订单
-    id1, id2 = Chose_ID(31, 60)
+    id1, id2 = Chose_ID(5000,10000)
     order_gen_JD_Month.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(bad_act_type)[0],
     )  # 京东月订单
-    id1, id2 = Chose_ID(31, 60)
+    id1, id2 = Chose_ID(5000,10000)
     order_gen_JD_Half_Year.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(bad_act_type)[0],
     )  # 京东半年订单
-    id1, id2 = Chose_ID(31, 60)
-    order_gen_PDD.generate_order(
-        consumers[id1],
-        producers[id2],
-        order_type=random.choices(bad_act_type)[0],
-    )  # 拼多多订单
-    id1, id2 = Chose_ID(31, 60)
-    order_gen_lease_platform.generate_order(
-        consumers[id1],
-        producers[id2],
-        order_type=random.choices(bad_lease_act_type)[0],
-    )  # 租赁平台订单
-    id1, id2 = Chose_ID(31, 60)
-    order_gen_XY.generate_order(
-        consumers[id1],
-        producers[id2],
-        order_type=random.choices(bad_act_type)[0],
-    )  # XY订单
+    # id1, id2 = Chose_ID(5000,10000)
+    # order_gen_PDD.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type=random.choices(bad_act_type)[0],
+    # )  # 拼多多订单
+    # id1, id2 = Chose_ID(5000,10000)
+    # order_gen_lease_platform.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type=random.choices(bad_lease_act_type)[0],
+    # )  # 租赁平台订单
+    # id1, id2 = Chose_ID(5000,10000)
+    # order_gen_XY.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type=random.choices(bad_act_type)[0],
+    # )  # XY订单
 
 
-for i in range(200):    # 生成200个中等订单
-    id1, id2 = Chose_ID(61, 90)
+for _ in tqdm(range(100000)):    # 生成100000个中等订单
+    id1, id2 = Chose_ID(10000,14999)
     order_gen_TB.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(
             act_type, weights=[0.9, 0.02, 0.03, 0.05])[0],
     )  # 淘宝订单
-    id1, id2 = Chose_ID(61, 90)
+    id1, id2 = Chose_ID(10000,14999)
+    order_gen_TB_Month.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type=random.choices(act_type, weights=[0.6, 0.1, 0.1, 0.2])[0],
+    )  # 淘宝月订单
+    id1, id2 = Chose_ID(10000,14999)
+    order_gen_TB_Half_Year.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type=random.choices(act_type, weights=[0.6, 0.1, 0.1, 0.2])[0],
+    )  # 淘宝半年订单
+
+    id1, id2 = Chose_ID(10000,14999)
     order_gen_JD.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(
             act_type, weights=[0.9, 0.02, 0.03, 0.05])[0],
     )  # 京东订单
-    id1, id2 = Chose_ID(61, 90)
+    id1, id2 = Chose_ID(10000,14999)
     order_gen_JD_Month.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(act_type, weights=[0.6, 0.1, 0.1, 0.2])[0],
     )  # 京东月订单
-    id1, id2 = Chose_ID(61, 90)
+    id1, id2 = Chose_ID(10000,14999)
     order_gen_JD_Half_Year.generate_order(
         consumers[id1],
         producers[id2],
         order_type=random.choices(act_type, weights=[0.6, 0.1, 0.1, 0.2])[0],
     )  # 京东半年订单
-    id1, id2 = Chose_ID(61, 90)
-    order_gen_PDD.generate_order(
-        consumers[id1],
-        producers[id2],
-        order_type=random.choices(
-            act_type, weights=[0.9, 0.02, 0.03, 0.05])[0],
-    )  # 拼多多订单
-    id1, id2 = Chose_ID(61, 90)
-    order_gen_lease_platform.generate_order(
-        consumers[id1],
-        producers[id2],
-        order_type=random.choices(lease_act_type, weights=[
-                                  0.9, 0.02, 0.03, 0.03, 0.02])[0],
-    )  # 租赁平台订单
-    id1, id2 = Chose_ID(61, 90)
-    order_gen_XY.generate_order(
-        consumers[id1],
-        producers[id2],
-        order_type=random.choices(
-            act_type, weights=[0.9, 0.02, 0.03, 0.05])[0],
-    )  # XY订单
+
+    # id1, id2 = Chose_ID(10000,14999)
+    # order_gen_PDD.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type=random.choices(
+    #         act_type, weights=[0.9, 0.02, 0.03, 0.05])[0],
+    # )  # 拼多多订单
+    # id1, id2 = Chose_ID(10000,14999)
+    # order_gen_lease_platform.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type=random.choices(lease_act_type, weights=[
+    #                               0.9, 0.02, 0.03, 0.03, 0.02])[0],
+    # )  # 租赁平台订单
+    # id1, id2 = Chose_ID(10000,14999)
+    # order_gen_XY.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type=random.choices(
+    #         act_type, weights=[0.9, 0.02, 0.03, 0.05])[0],
+    # )  # XY订单
 
 
-for i in range(100):    # 生成100个好订单
-    id1, id2 = Chose_ID(91, 99)
+for _ in tqdm(range(100000)):    # 生成100000个好订单
+    id1, id2 = Chose_ID(16000,18000)
     order_gen_TB.generate_order(
         consumers[id1],
         producers[id2],
         order_type="normal",
     )  # 淘宝订单
-    id1, id2 = Chose_ID(91, 99)
+    id1, id2 = Chose_ID(16000,18000)
+    order_gen_TB_Month.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type="normal",
+    )  # 淘宝月订单
+    id1, id2 = Chose_ID(16000,18000)
+    order_gen_TB_Half_Year.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type="normal",
+    )  # 淘宝半年订单
+
+    id1, id2 = Chose_ID(16000,18000)
     order_gen_JD.generate_order(
         consumers[id1],
         producers[id2],
         order_type="normal",
     )  # 京东订单
-    id1, id2 = Chose_ID(91, 99)
+    id1, id2 = Chose_ID(16000,18000)
     order_gen_JD_Month.generate_order(
         consumers[id1],
         producers[id2],
         order_type="normal",
     )  # 京东月订单
-    id1, id2 = Chose_ID(91, 99)
+    id1, id2 = Chose_ID(16000,18000)
     order_gen_JD_Half_Year.generate_order(
         consumers[id1],
         producers[id2],
         order_type="normal",
     )  # 京东半年订单
-    id1, id2 = Chose_ID(91, 99)
-    order_gen_PDD.generate_order(
+    # id1, id2 = Chose_ID(16000,18000)
+    # order_gen_PDD.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type="normal",
+    # )  # 拼多多订单
+    # id1, id2 = Chose_ID(16000,18000)
+    # order_gen_lease_platform.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type="normal",
+    # )  # 租赁平台订单
+    # id1, id2 = Chose_ID(16000,18000)
+    # order_gen_XY.generate_order(
+    #     consumers[id1],
+    #     producers[id2],
+    #     order_type="normal",
+    # )  # XY订单
+
+for _ in tqdm(range(3500)):     # 生成3500个好订单用于level2
+    id1, id2 = Chose_ID(18000,19999)
+    order_gen_TB.generate_order(
         consumers[id1],
         producers[id2],
         order_type="normal",
-    )  # 拼多多订单
-    id1, id2 = Chose_ID(91, 99)
-    order_gen_lease_platform.generate_order(
+    )  # 淘宝订单
+    id1, id2 = Chose_ID(18000,19999)
+    order_gen_TB_Month.generate_order(
         consumers[id1],
         producers[id2],
         order_type="normal",
-    )  # 租赁平台订单
-    id1, id2 = Chose_ID(91, 99)
-    order_gen_XY.generate_order(
+    )  # 淘宝月订单
+    id1, id2 = Chose_ID(18000,19999)
+    order_gen_TB_Half_Year.generate_order(
         consumers[id1],
         producers[id2],
         order_type="normal",
-    )  # XY订单
+    )  # 淘宝半年订单
+
+    id1, id2 = Chose_ID(18000,19999)
+    order_gen_JD.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type="normal",
+    )  # 京东订单
+    id1, id2 = Chose_ID(18000,19999)
+    order_gen_JD_Month.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type="normal",
+    )  # 京东月订单
+    id1, id2 = Chose_ID(18000,19999)
+    order_gen_JD_Half_Year.generate_order(
+        consumers[id1],
+        producers[id2],
+        order_type="normal",
+    )  # 京东半年订单
 
 
 # 生成信用评级
@@ -661,12 +755,14 @@ for producer in producers:
 
 # 写入CSV文件
 order_gen_TB.write_to_csv()
+order_gen_TB_Month.write_to_csv()
+order_gen_TB_Half_Year.write_to_csv()
 order_gen_JD.write_to_csv()
 order_gen_JD_Month.write_to_csv()
 order_gen_JD_Half_Year.write_to_csv()
-order_gen_PDD.write_to_csv()
-order_gen_lease_platform.write_to_csv()
-order_gen_XY.write_to_csv()
+# order_gen_PDD.write_to_csv()
+# order_gen_lease_platform.write_to_csv()
+# order_gen_XY.write_to_csv()
 
 
 payment_plantform_AliPay.write_to_csv()

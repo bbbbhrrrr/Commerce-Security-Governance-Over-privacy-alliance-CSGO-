@@ -109,7 +109,7 @@ def classify_user(data_row, data_month, data_half_year):
          (total_count >= 15 and half_year_score == 0 and total_score == 0):
         return 1  # 优先用户
     elif (total_count > 100 and month_score / total_count > 0.01) or \
-         (total_count <= 100 and month_score < 5):
+         (total_count <= 100 and month_score < 5 and total_score != 0):
         return 3  # 风险用户
     elif (total_count > 100 and month_score / total_count > 0.05) or \
          (total_count <= 100 and month_score >= 5):
@@ -132,19 +132,22 @@ def Cale_Total(data):
     return data
 
 
-if __name__ == '__main__':
-    file1 = 'orders_TB.csv'
+def Level(file1,file2,file3):
     Count(file1)
+    Count(file2)
+    Count(file3)
+    # 加载
 
-    # 加载数据
-    data1 = pd.read_csv('count_orders_TB.csv')
+    data1 = pd.read_csv('count_' + file1)
+    data2 = pd.read_csv('count_' + file2)
+    data3 = pd.read_csv('count_' + file3)
 
     # 基础恶意行为分数
     data1 = Cale_Total(data1)
+    data2 = Cale_Total(data2)
+    data3 = Cale_Total(data3)
 
-    print(data1)
-    data1['level'] = data1.apply(
-        lambda row: classify_user(row, data1, data1), axis=1)
+    data1['level'] = data1.apply(classify_user, args=(data2, data3), axis=1)
 
     # 需要删除的列列表
     columns_to_drop = [
@@ -158,5 +161,21 @@ if __name__ == '__main__':
     # 删除指定的列
     data_to_save = data1.drop(columns=columns_to_drop)
 
+    plantform = file1.split('_')[1].split('.')[0]
     # 保存数据集
-    data_to_save.to_csv('level_' + file1, index=False)
+    data_to_save.to_csv('leveled_' + file1, index=False, header=['ID','Total_Count_'+plantform,'Refund_Only_Count_'+plantform,'Rental_Not_Returned_Count_'+plantform,'Partial_Payment_After_Receipt_Count_'+plantform,'Payment_Without_Delivery_Count_'+plantform,'Amount_of_Loss_'+plantform,'level_'+plantform])
+
+
+    # data1['level'] = data1.apply(
+    #     lambda row: classify_user(row, data1, data1), axis=1)
+
+
+if __name__ == '__main__':
+    file1 = 'orders_TB.csv'
+    file2 = 'orders_TB_Month.csv'
+    file3 = 'orders_TB_Half_Year.csv'
+    Level(file1,file2,file3)
+    file4 = 'orders_JD.csv'
+    file5 = 'orders_JD_Month.csv'
+    file6 = 'orders_JD_Half_Year.csv'
+    Level(file4,file5,file6)
