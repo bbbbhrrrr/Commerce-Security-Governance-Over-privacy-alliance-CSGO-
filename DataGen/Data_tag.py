@@ -163,7 +163,7 @@ def Level(file1,file2,file3):
 
     plantform = file1.split('_')[1].split('.')[0]
     # 保存数据集
-    data_to_save.to_csv('leveled_' + file1, index=False, header=['ID_'+plantform,'Total_Count_'+plantform,'Refund_Only_Count_'+plantform,'Rental_Not_Returned_Count_'+plantform,'Partial_Payment_After_Receipt_Count_'+plantform,'Payment_Without_Delivery_Count_'+plantform,'Amount_of_Loss_'+plantform,'level_'+plantform])
+    data_to_save.to_csv('leveled_' + file1, index=False, header=['ID','Total_Count_'+plantform,'Refund_Only_Count_'+plantform,'Rental_Not_Returned_Count_'+plantform,'Partial_Payment_After_Receipt_Count_'+plantform,'Payment_Without_Delivery_Count_'+plantform,'Amount_of_Loss_'+plantform,'level_'+plantform])
 
 
     # data1['level'] = data1.apply(

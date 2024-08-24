@@ -1,4 +1,4 @@
-ID_JD,Total_Count_JD,Refund_Only_Count_JD,Rental_Not_Returned_Count_JD,Partial_Payment_After_Receipt_Count_JD,Payment_Without_Delivery_Count_JD,Amount_of_Loss_JD,level_JD
+ID,Total_Count_JD,Refund_Only_Count_JD,Rental_Not_Returned_Count_JD,Partial_Payment_After_Receipt_Count_JD,Payment_Without_Delivery_Count_JD,Amount_of_Loss_JD,level_JD
 140000197304229756,37,0,0,1,3,985.82,4
 320000195303230725,31,0,0,0,5,2221.75,3
 510000196907056123,45,0,0,3,4,2578.51,4
