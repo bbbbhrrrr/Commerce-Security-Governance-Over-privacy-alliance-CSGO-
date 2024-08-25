@@ -113,7 +113,7 @@ def create_base_model(input_dim, output_dim, name='base_model'):
         model.summary()
         model.compile(
             loss='categorical_crossentropy',
-            optimizer='adam',
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
             metrics=["accuracy", tf.keras.metrics.AUC()],
         )
         return model
@@ -144,7 +144,7 @@ def create_fuse_model(input_dim, output_dim, party_nums, name='fuse_model'):
 
         model.compile(
             loss='categorical_crossentropy',
-            optimizer='adam',
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
             metrics=["accuracy", tf.keras.metrics.AUC()],
         )
         return model
@@ -202,7 +202,7 @@ history = sl_model.fit(
     train_data,
     train_label,
     validation_data=(test_data, test_label),
-    epochs=10,
+    epochs=50,
     batch_size=train_batch_size,
     shuffle=True,
     verbose=1,
