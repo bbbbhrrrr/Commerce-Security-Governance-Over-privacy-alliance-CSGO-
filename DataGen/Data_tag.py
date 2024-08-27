@@ -99,8 +99,14 @@ def classify_user(data_row, data_month, data_half_year):
     total_count = data_row['Total_Count']
 
     # 获取对应行在data_month和data_half_year中的数据
-    month_score = data_month.loc[data_row.name, 'Total_Score']
-    half_year_score = data_half_year.loc[data_row.name, 'Total_Score']
+    if data_row.name in data_month.index:
+        month_score = data_month.loc[data_row.name, 'Total_Score']
+    else:
+        month_score = 0
+    if data_row.name in data_half_year.index:
+        half_year_score = data_half_year.loc[data_row.name, 'Total_Score']
+    else:
+        half_year_score = 0
 
     if total_score > 10:
         return 5  # 封禁用户
@@ -132,7 +138,7 @@ def Cale_Total(data):
     return data
 
 
-def Level(file1,file2,file3):
+def Level(file1, file2, file3):
     Count(file1)
     Count(file2)
     Count(file3)
@@ -163,8 +169,8 @@ def Level(file1,file2,file3):
 
     plantform = file1.split('_')[1].split('.')[0]
     # 保存数据集
-    data_to_save.to_csv('leveled_' + file1, index=False, header=['ID','Total_Count_'+plantform,'Refund_Only_Count_'+plantform,'Rental_Not_Returned_Count_'+plantform,'Partial_Payment_After_Receipt_Count_'+plantform,'Payment_Without_Delivery_Count_'+plantform,'Amount_of_Loss_'+plantform,'level_'+plantform])
-
+    data_to_save.to_csv('leveled_' + file1, index=False, header=['ID', 'Total_Count_'+plantform, 'Refund_Only_Count_'+plantform, 'Rental_Not_Returned_Count_' +
+                        plantform, 'Partial_Payment_After_Receipt_Count_'+plantform, 'Payment_Without_Delivery_Count_'+plantform, 'Amount_of_Loss_'+plantform, 'level_'+plantform])
 
     # data1['level'] = data1.apply(
     #     lambda row: classify_user(row, data1, data1), axis=1)
@@ -178,4 +184,8 @@ if __name__ == '__main__':
     file4 = 'orders_JD.csv'
     file5 = 'orders_JD_Month.csv'
     file6 = 'orders_JD_Half_Year.csv'
-    Level(file4,file5,file6)
+    Level(file4,file5,file6)   
+    file7 = 'orders_Total.csv'
+    file8 = 'orders_Total_Month.csv'
+    file9 = 'orders_Total_Half_Year.csv'
+    Level(file7,file8,file9)
