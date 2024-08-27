@@ -25,16 +25,18 @@ import tensorflow as tf
 import numpy as np
 
 # 初始化
-sf.init(['alice', 'bob'], address='local')
-alice, bob = sf.PYU('alice'), sf.PYU('bob')
+sf.init(['alice', 'bob','carol'], address='local')
+alice, bob,carol = sf.PYU('alice'), sf.PYU('bob'), sf.PYU('carol')
 
 path_dict = {
     alice: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_JD.csv',
-    bob: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_TB.csv'
+    bob: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_TB.csv',
+    carol: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Credit_score.csv'
+
 }
 
 # Prepare the SPU device
-spu = sf.SPU(sf.utils.testing.cluster_def(['alice', 'bob']))
+spu = sf.SPU(sf.utils.testing.cluster_def(['alice', 'bob','carol']))
 
 vdf = read_csv(path_dict, spu=spu, keys='ID', drop_keys="ID")
 
@@ -46,8 +48,9 @@ label_JD_vd = vdf["level_JD"]
 label_JD = vdf["level_JD"]
 label_TB = vdf["level_TB"]
 
+label = vdf["level_Total"]
 
-data = vdf.drop(columns=["level_JD", "level_TB"])
+data = vdf.drop(columns=["level_JD", "level_TB", "level_Total"])
 
 print(vdf.columns)
 
@@ -69,10 +72,13 @@ data['Payment_Without_Delivery_Count_JD']= encoder.fit_transform(data['Payment_W
 data['Payment_Without_Delivery_Count_TB']= encoder.fit_transform(data['Payment_Without_Delivery_Count_TB'])
 data['Amount_of_Loss_JD']= encoder.fit_transform(data['Amount_of_Loss_JD'])
 data['Amount_of_Loss_TB']= encoder.fit_transform(data['Amount_of_Loss_TB'])
+data['Credit_Score']= encoder.fit_transform(data['Credit_Score'])
+
 
 encoder = OneHotEncoder()
 label_JD = encoder.fit_transform(label_JD)
 label_TB = encoder.fit_transform(label_TB)
+label = encoder.fit_transform(label)
 
 print(f"label_JD = {type(label_JD)},\n label_TB= {type(label_TB)},\n data= {type(data)}")
 
@@ -91,7 +97,7 @@ train_data, test_data = train_test_split(
     data, train_size=0.85, random_state=random_state
 )
 train_label, test_label = train_test_split(
-    label_JD, train_size=0.85, random_state=random_state
+    label, train_size=0.85, random_state=random_state
 )
 
 
@@ -156,16 +162,18 @@ hidden_size = 64
 
 model_base_alice = create_base_model(6, hidden_size)
 model_base_bob = create_base_model(6, hidden_size)
+carol_model = create_base_model(1, hidden_size)
 
 model_base_alice()
 model_base_bob()
+carol_model()
 
 
-model_fuse = create_fuse_model(input_dim=hidden_size, party_nums=2, output_dim=5)
+model_fuse = create_fuse_model(input_dim=hidden_size, party_nums=3, output_dim=5)
 
 model_fuse()
 
-base_model_dict = {alice: model_base_alice, bob: model_base_bob}
+base_model_dict = {alice: model_base_alice, bob: model_base_bob, carol: carol_model}
 
 
 # Define DP operations
@@ -185,18 +193,11 @@ dp_spent_step_freq = 10
 
 sl_model = SLModel(
     base_model_dict=base_model_dict,
-    device_y=alice,
+    device_y=carol,
     model_fuse=model_fuse,
     dp_strategy_dict=dp_strategy_dict,
 )
 
-sf.reveal(test_data.partitions[alice].data), sf.reveal(
-    test_label.partitions[alice].data
-)
-
-sf.reveal(train_data.partitions[alice].data), sf.reveal(
-    train_label.partitions[alice].data
-)
 
 history = sl_model.fit(
     train_data,
@@ -248,7 +249,7 @@ predicted_one_hot = tf.one_hot(max_indices, depth=tensor.shape[1])
 # 打印预测结果和真实标签，作为对比
 print(f"predicted_one_hot = {predicted_one_hot}")
 
-print(sf.reveal(test_label.partitions[alice].data))
+print(sf.reveal(test_label.partitions[carol].data))
 
 # Evaluate the model
 evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
