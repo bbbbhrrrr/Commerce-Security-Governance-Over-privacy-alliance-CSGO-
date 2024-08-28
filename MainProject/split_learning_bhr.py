@@ -29,9 +29,9 @@ sf.init(['alice', 'bob','carol'], address='local')
 alice, bob,carol = sf.PYU('alice'), sf.PYU('bob'), sf.PYU('carol')
 
 path_dict = {
-    alice: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_JD.csv',
-    bob: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_TB.csv',
-    carol: '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Credit_score.csv'
+    alice: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_orders_JD.csv',
+    bob: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_orders_TB.csv',
+    carol: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_Credit_score.csv'
 
 }
 
@@ -99,6 +99,32 @@ train_data, test_data = train_test_split(
 train_label, test_label = train_test_split(
     label, train_size=0.85, random_state=random_state
 )
+
+
+import pandas as pd
+
+def calculate_transaction_limits(order_amount_path, credit_score_path, output_path):
+    
+    # 读取订单金额数据
+    order_amount_df = pd.read_csv(order_amount_path)
+    
+    # 读取信誉分数据
+    credit_score_df = pd.read_csv(credit_score_path)
+    
+    # 合并数据
+    merged_df = pd.merge(order_amount_df, credit_score_df, on='ID')
+    
+    # 计算加权额度
+    # 假设 'Amount_of_Loss_Total' 是订单金额列，'Credit_Score' 是信誉分列
+    merged_df['Weighted_Amount'] = merged_df['Amount_of_Loss_Total'] * (merged_df['Credit_Score'] / merged_df['Credit_Score'].max())
+    merged_df['Transaction_Limit'] = merged_df.groupby('ID')['Weighted_Amount'].transform('sum')
+    
+    #去除重复的 ID 行，保留每个 ID 的交易额度
+    transaction_limits = merged_df[['ID', 'Transaction_Limit']].drop_duplicates()
+    
+    transaction_limits.to_csv(output_path, index=False)
+    
+    print(f"交易额度已保存到 {output_path}")
 
 
 def create_base_model(input_dim, output_dim, name='base_model'):
@@ -255,7 +281,12 @@ print(sf.reveal(test_label.partitions[carol].data))
 evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
 print(evaluator)
 
+# 调用函数
+order_amount_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_Total.csv'
+credit_score_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_Credit_score.csv'
+output_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/transaction_limits.csv'
 
+calculate_transaction_limits(order_amount_path, credit_score_path, output_path)
 
 # Plot the change of loss during training
 plt.plot(history['train_loss'])
