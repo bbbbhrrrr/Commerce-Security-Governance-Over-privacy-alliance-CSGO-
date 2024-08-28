@@ -127,6 +127,60 @@ def calculate_transaction_limits(order_amount_path, credit_score_path, output_pa
     print(f"交易额度已保存到 {output_path}")
 
 
+import pandas as pd
+import numpy as np
+import tensorflow as tf
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+
+def calculate_transaction_limits_with_nn(order_amount_path, credit_score_path, output_path, epochs=50, batch_size=32):
+    
+    order_amount_df = pd.read_csv(order_amount_path)
+    
+    credit_score_df = pd.read_csv(credit_score_path)
+    
+    merged_df = pd.merge(order_amount_df, credit_score_df, on='ID')
+    
+    #提取特征和标签
+    X = merged_df[['Amount_of_Loss_Total', 'Credit_Score']]
+    y = merged_df['Amount_of_Loss_Total']  # 可以根据需求更改目标值
+    
+    #数据归一化
+    scaler = MinMaxScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    #划分训练集和测试集
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+    
+    #构建神经网络模型
+    model = tf.keras.Sequential([
+        tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+        tf.keras.layers.Dense(32, activation='relu'),
+        tf.keras.layers.Dense(1, activation='linear')  # 预测连续值
+    ])
+    
+    model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+    
+    #模型
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.2, verbose=1)
+    
+    #评估模型
+    test_loss, test_mae = model.evaluate(X_test, y_test)
+    print(f"Test Loss: {test_loss}, Test MAE: {test_mae}")
+    
+    #预测交易额度
+    merged_df['Predicted_Transaction_Limit'] = model.predict(X_scaled)
+    
+    #去除重复的 ID 行，保留每个 ID 的交易额度
+    transaction_limits = merged_df[['ID', 'Predicted_Transaction_Limit']].drop_duplicates()
+    
+    transaction_limits.to_csv(output_path, index=False)
+    
+    print(f"交易额度已保存到 {output_path}")
+
+
+
+
 def create_base_model(input_dim, output_dim, name='base_model'):
     # Create model
     def create_model():
@@ -286,7 +340,9 @@ order_amount_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--ma
 credit_score_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_Credit_score.csv'
 output_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/transaction_limits.csv'
 
-calculate_transaction_limits(order_amount_path, credit_score_path, output_path)
+# calculate_transaction_limits(order_amount_path, credit_score_path, output_path)
+
+calculate_transaction_limits_with_nn(order_amount_path, credit_score_path, output_path)
 
 # Plot the change of loss during training
 plt.plot(history['train_loss'])
