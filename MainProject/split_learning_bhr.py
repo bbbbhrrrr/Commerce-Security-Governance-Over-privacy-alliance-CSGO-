@@ -115,8 +115,8 @@ def calculate_transaction_limits(order_amount_path, credit_score_path, output_pa
     merged_df = pd.merge(order_amount_df, credit_score_df, on='ID')
     
     # 计算加权额度
-    # 假设 'Amount_of_Loss_Total' 是订单金额列，'Credit_Score' 是信誉分列
-    merged_df['Weighted_Amount'] = merged_df['Amount_of_Loss_Total'] * (merged_df['Credit_Score'] / merged_df['Credit_Score'].max())
+    # 假设 'Amount_of_Loss_Total' 是订单误差金额列，'Credit_Score' 是信誉分列
+    merged_df['Weighted_Amount'] = (merged_df['Amount_of_Loss_Total'].max() - merged_df['Amount_of_Loss_Total']) * (merged_df['Credit_Score'] * merged_df['Credit_Score'] / merged_df['Credit_Score'].max())
     merged_df['Transaction_Limit'] = merged_df.groupby('ID')['Weighted_Amount'].transform('sum')
     
     #去除重复的 ID 行，保留每个 ID 的交易额度
