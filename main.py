@@ -80,7 +80,6 @@ def main(args):
         print(f"[✓] 读取的 cluster_config: {cluster_config}")
         print(f"[✓] cluster_def: {cluster_def}")
 
-        ray_address = None
         if args.ray_address is None:
             ray_address = input("[*] 请输入本节点 Ray 集群的 URL, 格式为 IP:PORT :")
         else:

@@ -41,12 +41,11 @@ def get_data(users, spu):
     return vdf
 
 
-def get_predict_data(users, spu, self_party=None):
+def get_predict_data(users, spu):
     """获取预测数据"""
 
     # 初始化一个空字典来存储路径
 
-    print('#################self:', self_party)
     input_path = {}
     # 接受每个用户的输入
     for user in users:
@@ -55,16 +54,16 @@ def get_predict_data(users, spu, self_party=None):
 
     output_path = {}
 
-    print
+    
     for user in users:
         path = input(f"请输入 {user} 的输出路径: ")
         output_path[user] = path
 
-    print(f"input_path = {input_path}")
-    print(f"output_path = {output_path}")
+    # print(f"input_path = {input_path}")
+    # print(f"output_path = {output_path}")
 
     spu.psi_csv(
-        ['ID'], input_path, output_path, self_party, protocol='ECDH_PSI_3PC', precheck_input=False, broadcast_result=False
+        ['ID'], input_path, output_path, 'carol', protocol='ECDH_PSI_3PC', precheck_input=False, broadcast_result=False
     )
 
     print(f"[✓] 隐私求交数据已保存到 {output_path}")
