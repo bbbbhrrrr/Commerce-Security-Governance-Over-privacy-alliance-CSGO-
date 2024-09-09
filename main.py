@@ -40,7 +40,9 @@ def work(users, spu, self_party=None, self_party_name=None):
 
     print("[*] 开始计算额度限制……")
 
-    calculate_transaction_limits(input_path[self_party], output_file,)
+    result_path = input("[*] 请输入结果文件路径：")
+
+    calculate_transaction_limits(input_path[self_party], output_file, result_path)
 
     print("[*] 训练结果展示：")
     show_mode_result(history)
