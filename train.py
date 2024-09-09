@@ -398,21 +398,24 @@ def merge_data(credit_score_df, result_df, output_file):
     print(f"已成功更新 level 列，处理后的行数为 {min_length} 行。")
 
 
-def calculate_transaction_limits(order_amount_path, level_path, output_path):
+def calculate_transaction_limits(order_amount_path, output_path,self_party_name):
 
+    if self_party_name == 'carol':
+        print("[x] 无交易额度计算数据，跳过计算")
+        return
+
+    plantform = '_' + order_amount_df.split('/')[-1].split('_')[-1].split('.')[0]
     
-    # 读取订单金额数据
+    # 读取订单金额数据和评级
     order_amount_df = pd.read_csv(order_amount_path)
-    # 读取评级
-    level_df = pd.read_csv(level_path)
 
     # 合并数据
     # merged_df1 = pd.merge(order_amount_df, on='ID')
-    merged_df = pd.merge(order_amount_df, level_df, on='ID')
+    merged_df = order_amount_df
 
     # 计算加权额度
     # 假设 'Amount_of_Loss_Total' 是订单误差金额列，'Credit_Score' 是信誉分列
-    merged_df['Weighted_Amount'] = (merged_df['Amount_of_Loss'].max() - merged_df['Amount_of_Loss']) * (
+    merged_df['Weighted_Amount'] = (merged_df['Amount_of_Loss' + plantform].max() - merged_df['Amount_of_Loss'+ plantform]) * (
         merged_df['level'].max() - merged_df['level'] + 0.5) * (merged_df['level'].max() - merged_df['level'] + 0.5)
     merged_df['Transaction_Limit'] = merged_df.groupby(
         'ID')['Weighted_Amount'].transform('sum')

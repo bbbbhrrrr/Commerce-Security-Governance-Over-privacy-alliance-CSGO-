@@ -42,7 +42,7 @@ def work(users, spu, self_party=None, self_party_name=None):
 
     result_path = input("[*] 请输入结果文件路径：")
 
-    calculate_transaction_limits(input_path[self_party], output_file, result_path)
+    calculate_transaction_limits(input_path[self_party], result_path, self_party_name)
 
     print("[*] 训练结果展示：")
     show_mode_result(history)
