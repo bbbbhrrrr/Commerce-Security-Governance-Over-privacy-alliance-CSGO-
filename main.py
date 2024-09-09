@@ -24,7 +24,7 @@ def work(users, spu, self_party=None, self_party_name=None):
 
     print("[*] 开始读取预测数据……")
 
-    vdf2 , output_path, input_path= get_predict_data(users, spu, self_party_name)
+    vdf2 , output_path, input_path= get_predict_data(users, spu)
 
     print(f"[✓] 预测数据读取完成: {vdf2}")
 
