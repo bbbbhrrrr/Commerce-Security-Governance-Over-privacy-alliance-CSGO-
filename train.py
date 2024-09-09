@@ -319,7 +319,7 @@ def level_predict(sl_model, test_data, output_path, self_party):
     y_pred = sl_model.predict(test_data)
     print(f"type(y_pred) = {type(y_pred)}")
 
-    print(sf.reveal(y_pred))
+    print(sf.reveal(y_pred))    
 
     data = sf.reveal(y_pred)
 
@@ -400,7 +400,7 @@ def merge_data(credit_score_df, result_df, output_file):
 
 def calculate_transaction_limits(order_amount_path, level_path, output_path):
 
-    platform = '_'+order_amount_path.split('/')[-1].split('_')[2]
+    
     # 读取订单金额数据
     order_amount_df = pd.read_csv(order_amount_path)
     # 读取评级
@@ -412,10 +412,10 @@ def calculate_transaction_limits(order_amount_path, level_path, output_path):
 
     # 计算加权额度
     # 假设 'Amount_of_Loss_Total' 是订单误差金额列，'Credit_Score' 是信誉分列
-    merged_df['Weighted_Amount'+platform] = (merged_df['Amount_of_Loss'+platform].max() - merged_df['Amount_of_Loss'+platform]) * (
+    merged_df['Weighted_Amount'] = (merged_df['Amount_of_Loss'].max() - merged_df['Amount_of_Loss']) * (
         merged_df['level'].max() - merged_df['level'] + 0.5) * (merged_df['level'].max() - merged_df['level'] + 0.5)
-    merged_df['Transaction_Limit'+platform] = merged_df.groupby(
-        'ID')['Weighted_Amount'+platform].transform('sum')
+    merged_df['Transaction_Limit'] = merged_df.groupby(
+        'ID')['Weighted_Amount'].transform('sum')
 
     # 去除重复的 ID 行，保留每个 ID 的交易额度
     transaction_limits = merged_df[[
