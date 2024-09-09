@@ -43,9 +43,10 @@ def get_data(users, spu):
 
 def get_predict_data(users, spu, self_party=None):
     """获取预测数据"""
+
     # 初始化一个空字典来存储路径
 
-    print('#################self:',self_party)
+    print('#################self:', self_party)
     input_path = {}
     # 接受每个用户的输入
     for user in users:
@@ -54,19 +55,22 @@ def get_predict_data(users, spu, self_party=None):
 
     output_path = {}
 
+    print
     for user in users:
         path = input(f"请输入 {user} 的输出路径: ")
         output_path[user] = path
 
-
+    print(f"input_path = {input_path}")
+    print(f"output_path = {output_path}")
 
     spu.psi_csv(
-        ['ID'], input_path, output_path, self_party, protocol='ECDH_PSI_3PC'
+        ['ID'], input_path, output_path, self_party, protocol='ECDH_PSI_3PC', precheck_input=False, broadcast_result=False
     )
 
     print(f"[✓] 隐私求交数据已保存到 {output_path}")
-    
-    vdf2 = read_csv(output_path,spu=spu,keys='ID',drop_keys='ID',psi_protocl="ECDH_PSI_3PC")
+
+    vdf2 = read_csv(output_path, spu=spu, keys='ID',
+                    drop_keys='ID', psi_protocl="ECDH_PSI_3PC")
 
     return vdf2, output_path, input_path
 
@@ -294,10 +298,9 @@ def training(train_data, train_label, test_data, test_label, users):
         dp_spent_step_freq=dp_spent_step_freq,
     )
 
-        # Evaluate the model
+    # Evaluate the model
     evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
     print(evaluator)
-
 
     return history, sl_model
 
@@ -349,7 +352,7 @@ def predict(sl_model, test_data, output_path, self_party):
     df = pd.DataFrame(1 + tf.argmax(predicted_one_hot, axis=1))
 
     # output_file = "Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/result.csv"
-    
+
     output_file = input('[*] 请输入预测结果保存路径: ')
 
     df.to_csv(output_file, index=False)
@@ -389,28 +392,32 @@ def merge_data(credit_score_df, result_df, output_file):
 
 
 def calculate_transaction_limits(order_amount_path, level_path, output_path):
-    
+
     platform = '_'+order_amount_path.split('/')[-1].split('_')[2]
     # 读取订单金额数据
     order_amount_df = pd.read_csv(order_amount_path)
     # 读取评级
     level_df = pd.read_csv(level_path)
-    
+
     # 合并数据
     # merged_df1 = pd.merge(order_amount_df, on='ID')
     merged_df = pd.merge(order_amount_df, level_df, on='ID')
-    
+
     # 计算加权额度
     # 假设 'Amount_of_Loss_Total' 是订单误差金额列，'Credit_Score' 是信誉分列
-    merged_df['Weighted_Amount'+platform] = (merged_df['Amount_of_Loss'+platform].max() - merged_df['Amount_of_Loss'+platform]) * (merged_df['level'].max() - merged_df['level'] + 0.5) * (merged_df['level'].max() - merged_df['level'] + 0.5)
-    merged_df['Transaction_Limit'+platform] = merged_df.groupby('ID')['Weighted_Amount'+platform].transform('sum')
-    
-    #去除重复的 ID 行，保留每个 ID 的交易额度
-    transaction_limits = merged_df[['ID', 'Transaction_Limit']].drop_duplicates()
-    
+    merged_df['Weighted_Amount'+platform] = (merged_df['Amount_of_Loss'+platform].max() - merged_df['Amount_of_Loss'+platform]) * (
+        merged_df['level'].max() - merged_df['level'] + 0.5) * (merged_df['level'].max() - merged_df['level'] + 0.5)
+    merged_df['Transaction_Limit'+platform] = merged_df.groupby(
+        'ID')['Weighted_Amount'+platform].transform('sum')
+
+    # 去除重复的 ID 行，保留每个 ID 的交易额度
+    transaction_limits = merged_df[[
+        'ID', 'Transaction_Limit']].drop_duplicates()
+
     transaction_limits.to_csv(output_path, index=False)
-    
+
     print(f"[✓] 交易额度已保存到 {output_path}")
+
 
 def show_mode_result(history):
     """显示模型结果"""
