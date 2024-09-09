@@ -66,6 +66,14 @@ def get_predict_data(users, spu):
         ['ID'], input_path, output_path, 'carol', protocol='ECDH_PSI_3PC', precheck_input=False, broadcast_result=False
     )
 
+    spu.psi_csv(
+        ['ID'], input_path, output_path, 'bob', protocol='ECDH_PSI_3PC', precheck_input=False, broadcast_result=False
+    )
+
+    spu.psi_csv(
+        ['ID'], input_path, output_path, 'alice', protocol='ECDH_PSI_3PC', precheck_input=False, broadcast_result=False
+    )
+
     print(f"[✓] 隐私求交数据已保存到 {output_path}")
 
     vdf2 = read_csv(output_path, spu=spu, keys='ID',
