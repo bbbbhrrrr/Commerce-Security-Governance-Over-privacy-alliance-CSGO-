@@ -1,2 +1,3 @@
 secretflow
 matplotlib
+unidecode
