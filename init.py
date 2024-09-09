@@ -152,7 +152,7 @@ def get_cluster_config(config_path='config.py'):
         print(f"\n{e}")
         create_new = input("[*] 是否创建新的 cluster_config？(y/N): ").strip().lower()
         if create_new == 'y':
-            cluster_config = create_cluster_config()
+            cluster_config= create_cluster_config()
             save_path = input(f"[*] 请输入保存目录和文件名（默认: {config_path}）: ").strip()
             print("[*] 默认使用各节点的 Proxy 端口 + 10000 作为 SPU 端口")
             print("[*] 请保证接下来输入的 Proxy 端口 小于 50000")
@@ -209,5 +209,5 @@ def get_config_triplets(args):
     link_desc = {
         'recv_timeout_ms': 3600000
     }
-
-    return cluster_config, cluster_def, link_desc
+    self_party = cluster_config['self_party']
+    return cluster_config, cluster_def, link_desc, self_party

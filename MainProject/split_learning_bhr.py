@@ -29,17 +29,17 @@ sf.init(['alice', 'bob','carol'], address='local')
 alice, bob,carol = sf.PYU('alice'), sf.PYU('bob'), sf.PYU('carol')
 
 path_dict = {
-    alice: '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_JD.csv',
-    bob: '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_TB.csv',
-    carol: '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Credit_score.csv'
+    alice: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_orders_JD.csv',
+    bob: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_orders_TB.csv',
+    carol: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_Credit_score.csv'
 
 }
 
 # Prepare the SPU device
 spu = sf.SPU(sf.utils.testing.cluster_def(['alice', 'bob','carol']))
 
-vdf = read_csv(path_dict, spu=spu, keys='ID', drop_keys="ID")
-
+vdf = read_csv(path_dict, spu=spu, keys='ID', drop_keys='ID')
+# vdf = read_csv(path_dict, spu=spu, keys='ID')
 
 print(vdf)
 
@@ -59,6 +59,33 @@ print(data.columns)
 print(f"label_JD = {type(label_JD)},\n label_TB= {type(label_TB)},\n data= {type(data)}")
 
 
+input_path_dict = {
+    alice: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_orders_JD.csv',
+    bob: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_orders_TB.csv',
+    carol: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_Credit_score.csv'
+
+}
+output_path = {
+    alice: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/count_orders_JD_psi.csv',
+    bob: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/count_orders_TB_psi.csv',
+    carol: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/Credit_score_psi.csv'
+
+}
+spu = sf.SPU(sf.utils.testing.cluster_def(['alice', 'bob','carol']))
+
+spu.psi_csv(
+    ['ID'], input_path_dict, output_path, 'carol', protocol='ECDH_PSI_3PC'
+)
+
+
+vdf2 = read_csv(output_path,spu=spu,keys='ID',drop_keys='ID')
+
+
+print(vdf2.columns)
+
+data2 = vdf2.drop(columns=["level_JD", "level_TB", "level_Total"])
+
+print(data2.columns)
 encoder = LabelEncoder()
 data['Total_Count_JD'] = encoder.fit_transform(data['Total_Count_JD'])
 data['Total_Count_TB'] = encoder.fit_transform(data['Total_Count_TB'])
@@ -75,6 +102,21 @@ data['Amount_of_Loss_TB']= encoder.fit_transform(data['Amount_of_Loss_TB'])
 data['Credit_Score']= encoder.fit_transform(data['Credit_Score'])
 
 
+data2['Total_Count_JD'] = encoder.fit_transform(data2['Total_Count_JD'])
+data2['Total_Count_TB'] = encoder.fit_transform(data2['Total_Count_TB'])
+data2['Refund_Only_Count_JD']= encoder.fit_transform(data2['Refund_Only_Count_JD'])
+data2['Refund_Only_Count_TB']= encoder.fit_transform(data2['Refund_Only_Count_TB'])
+data2['Rental_Not_Returned_Count_JD']= encoder.fit_transform(data2['Rental_Not_Returned_Count_JD'])
+data2['Rental_Not_Returned_Count_TB']= encoder.fit_transform(data2['Rental_Not_Returned_Count_TB'])
+data2['Partial_Payment_After_Receipt_Count_JD']= encoder.fit_transform(data2['Partial_Payment_After_Receipt_Count_JD'])
+data2['Partial_Payment_After_Receipt_Count_TB']= encoder.fit_transform(data2['Partial_Payment_After_Receipt_Count_TB'])
+data2['Payment_Without_Delivery_Count_JD']= encoder.fit_transform(data2['Payment_Without_Delivery_Count_JD'])
+data2['Payment_Without_Delivery_Count_TB']= encoder.fit_transform(data2['Payment_Without_Delivery_Count_TB'])
+data2['Amount_of_Loss_JD']= encoder.fit_transform(data2['Amount_of_Loss_JD'])
+data2['Amount_of_Loss_TB']= encoder.fit_transform(data2['Amount_of_Loss_TB'])
+data2['Credit_Score']= encoder.fit_transform(data2['Credit_Score'])
+
+
 encoder = OneHotEncoder()
 label_JD = encoder.fit_transform(label_JD)
 label_TB = encoder.fit_transform(label_TB)
@@ -86,6 +128,8 @@ print(f"label_JD = {type(label_JD)},\n label_TB= {type(label_TB)},\n data= {type
 
 scaler = MinMaxScaler()
 data = scaler.fit_transform(data)
+
+data2 = scaler.fit_transform(data2)
 
 print("===============this is data=====================")
 print(data)
@@ -103,20 +147,20 @@ train_label, test_label = train_test_split(
 
 import pandas as pd
 
-def calculate_transaction_limits(order_amount_path, credit_score_path, output_path):
+def calculate_transaction_limits(order_amount_path_JD, level_path, output_path):
     
     # 读取订单金额数据
-    order_amount_df = pd.read_csv(order_amount_path)
-    
-    # 读取信誉分数据
-    credit_score_df = pd.read_csv(credit_score_path)
+    order_amount_df_JD = pd.read_csv(order_amount_path_JD)
+    # 读取评级
+    level_df = pd.read_csv(level_path)
     
     # 合并数据
-    merged_df = pd.merge(order_amount_df, credit_score_df, on='ID')
+    # merged_df1 = pd.merge(order_amount_df_JD, order_amount_df_TB, on='ID')
+    merged_df = pd.merge(order_amount_df_JD, level_df, on='ID')
     
     # 计算加权额度
     # 假设 'Amount_of_Loss_Total' 是订单误差金额列，'Credit_Score' 是信誉分列
-    merged_df['Weighted_Amount'] = (merged_df['Amount_of_Loss_Total'].max() - merged_df['Amount_of_Loss_Total']) * (merged_df['Credit_Score'] * merged_df['Credit_Score'] / merged_df['Credit_Score'].max())
+    merged_df['Weighted_Amount'] = (merged_df['Amount_of_Loss_JD'].max() -   merged_df['Amount_of_Loss_JD']) * (merged_df['level'].max() - merged_df['level'] + 0.5) * (merged_df['level'].max() - merged_df['level'] + 0.5)
     merged_df['Transaction_Limit'] = merged_df.groupby('ID')['Weighted_Amount'].transform('sum')
     
     #去除重复的 ID 行，保留每个 ID 的交易额度
@@ -238,7 +282,7 @@ history = sl_model.fit(
 )
 
 # predict the test data
-y_pred = sl_model.predict(test_data)
+y_pred = sl_model.predict(data2)
 print(f"type(y_pred) = {type(y_pred)}")
 
 print(sf.reveal(y_pred))
@@ -263,7 +307,8 @@ for tensor in data:
     padded_data.append(padded_tensor)
 
 # 将数据转换为TensorFlow张量
-tensor = tf.convert_to_tensor(tensor, dtype=tf.float32)
+tensor = tf.convert_to_tensor(padded_data, dtype=tf.float32)
+
 # print(f"tensor = {tensor}")
 # 将 tensor 转换为5列的形式
 tensor = tf.reshape(tensor, [-1, 5])
@@ -279,6 +324,12 @@ predicted_one_hot = tf.one_hot(max_indices, depth=tensor.shape[1])
 print(f"predicted_one_hot = {predicted_one_hot}")
 print(sf.reveal)
 print(sf.reveal(test_label.partitions[carol].data))
+
+df = pd.DataFrame(1 + tf.argmax(predicted_one_hot, axis=1))
+
+output_file = "Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/result.csv"
+df.to_csv(output_file, index=False)
+print(f"Results saved to {output_file}")
 
 import pandas as pd
 
@@ -296,11 +347,13 @@ evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
 print(evaluator)
 
 # 调用函数
-order_amount_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Total.csv'
-credit_score_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Credit_score.csv'
-output_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/transaction_limits.csv'
+order_amount_path_JD = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/count_orders_JD_psi.csv'
+order_amount_path_TB = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/count_orders_TB_psi.csv'
 
-calculate_transaction_limits(order_amount_path, credit_score_path, output_path)
+credit_score_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/Credit_score_psi_updated.csv'
+output_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/transaction_limits.csv'
+
+calculate_transaction_limits(order_amount_path_JD,  credit_score_path, output_path)
 
 # Plot the change of loss during training
 plt.plot(history['train_loss'])

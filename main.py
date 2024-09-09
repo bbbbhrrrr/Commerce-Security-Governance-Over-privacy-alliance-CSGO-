@@ -1,9 +1,9 @@
 import argparse
 import secretflow as sf
 from init import welcome, env_check, skip_check, get_config_triplets
-from train import get_data, gen_train_data, training, show_mode_result
+from train import get_data, gen_train_data, training, show_mode_result, get_predict_data, man_predict_data, predict, calculate_transaction_limits
 
-def work(users, spu):
+def work(users, spu, self_party=None, self_party_name=None):
     print("[*] 开始收集数据……")
 
     vdf = get_data(users, spu)
@@ -18,19 +18,29 @@ def work(users, spu):
 
     print("[*] 开始训练模型……")
 
-    history = training(train_data, train_label, test_data, test_label, users)
+    history, sl_model= training(train_data, train_label, test_data, test_label, users)
 
     print(f"[✓] 训练完成: {history}")
 
-    # print("[*] 开始计算额度限制……")1
+    print("[*] 开始读取预测数据……")
 
-    # print("[*] 开始保存模型……")
+    vdf2 , output_path, input_path= get_predict_data(users, spu, self_party_name)
 
-    # model_path = input("[*] 请输入模型保存路径: ")
+    print(f"[✓] 预测数据读取完成: {vdf2}")
 
-    # users[0].save_model(model_path)
+    print("[*] 开始处理预测数据……")
 
-    # print(f"[✓] 模型保存完成: {model_path}")
+    data_pri = man_predict_data(vdf2)
+
+    print(f"[✓] 预测数据处理完成: {data_pri}")
+
+    print("[*] 开始预测……")
+
+    output_file = predict(sl_model, data_pri, output_path, self_party)
+
+    print("[*] 开始计算额度限制……")
+
+    calculate_transaction_limits(input_path[self_party], output_file,)
 
     print("[*] 训练结果展示：")
     show_mode_result(history)
@@ -65,7 +75,7 @@ def main(args):
         work(users, spu)
 
     else:
-        cluster_config, cluster_def, link_desc = get_config_triplets(args)
+        cluster_config, cluster_def, link_desc, self_party_name = get_config_triplets(args)
 
         print(f"[✓] 读取的 cluster_config: {cluster_config}")
         print(f"[✓] cluster_def: {cluster_def}")
@@ -84,10 +94,12 @@ def main(args):
         users = [f'party_{i+1}' for i in range(len(partis))]
         for i, key in enumerate(partis):  # 直接使用 partis，无需再调用 .keys()
             users[i] = sf.PYU(key)  # 使用 dict 的键而不是通过下标访问
+            if key == self_party_name:
+                self_party = users[i]
         
         print("[✓] 生产环境初始化完成")
-        
-        work(users, spu)
+
+        work(users, spu, self_party, self_party_name)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -16,7 +16,6 @@ import numpy as np
 from secretflow.data.vertical import read_csv
 
 
-
 def get_data(users, spu):
     """获取数据"""
 
@@ -36,12 +35,35 @@ def get_data(users, spu):
     #     carol:  '/home/lwzheng/workspace/sf/DataGen/leveled_Credit_score.csv'
     # }
 
-    
-
     vdf = read_csv(input_path, spu=spu, keys=key_columns,
                    drop_keys=label_columns, psi_protocl="ECDH_PSI_3PC")
 
     return vdf
+
+
+def get_predict_data(users, spu, self_party=None):
+    """获取预测数据"""
+    # 初始化一个空字典来存储路径
+    input_path = {}
+    # 接受每个用户的输入
+    for user in users:
+        path = input(f"请输入 {user} 的文件路径: ")
+        input_path[user] = path
+
+    output_path = {}
+
+    for user in users:
+        path = input(f"请输入 {user} 的输出路径: ")
+        output_path[user] = path
+
+
+    spu.psi_csv(
+        ['ID'], input_path, output_path, self_party, protocol='ECDH_PSI_3PC'
+    )
+
+    vdf2 = read_csv(output_path,spu=spu,keys='ID',drop_keys='ID')
+
+    return vdf2, output_path, input_path
 
 
 def gen_train_data(vdf):
@@ -98,6 +120,53 @@ def gen_train_data(vdf):
     )
 
     return train_data, test_data, train_label, test_label
+
+
+def man_predict_data(vdf):
+    """处理预测数据"""
+
+    # label_JD = vdf["level_JD"]
+    # label_TB = vdf["level_TB"]
+    # label = vdf["level_Total"]
+
+    # 删除标签列
+    # data = vdf.drop(columns=["level_JD", "level_TB", "level_Total"])
+    data = vdf
+    # 对数据进行编码
+    encoder = LabelEncoder()
+    data['Total_Count_JD'] = encoder.fit_transform(data['Total_Count_JD'])
+    data['Total_Count_TB'] = encoder.fit_transform(data['Total_Count_TB'])
+    data['Refund_Only_Count_JD'] = encoder.fit_transform(
+        data['Refund_Only_Count_JD'])
+    data['Refund_Only_Count_TB'] = encoder.fit_transform(
+        data['Refund_Only_Count_TB'])
+    data['Rental_Not_Returned_Count_JD'] = encoder.fit_transform(
+        data['Rental_Not_Returned_Count_JD'])
+    data['Rental_Not_Returned_Count_TB'] = encoder.fit_transform(
+        data['Rental_Not_Returned_Count_TB'])
+    data['Partial_Payment_After_Receipt_Count_JD'] = encoder.fit_transform(
+        data['Partial_Payment_After_Receipt_Count_JD'])
+    data['Partial_Payment_After_Receipt_Count_TB'] = encoder.fit_transform(
+        data['Partial_Payment_After_Receipt_Count_TB'])
+    data['Payment_Without_Delivery_Count_JD'] = encoder.fit_transform(
+        data['Payment_Without_Delivery_Count_JD'])
+    data['Payment_Without_Delivery_Count_TB'] = encoder.fit_transform(
+        data['Payment_Without_Delivery_Count_TB'])
+    data['Amount_of_Loss_JD'] = encoder.fit_transform(
+        data['Amount_of_Loss_JD'])
+    data['Amount_of_Loss_TB'] = encoder.fit_transform(
+        data['Amount_of_Loss_TB'])
+    data['Credit_Score'] = encoder.fit_transform(data['Credit_Score'])
+
+    # encoder = OneHotEncoder()
+    # label_JD = encoder.fit_transform(label_JD)
+    # label_TB = encoder.fit_transform(label_TB)
+    # label = encoder.fit_transform(label)
+
+    scaler = MinMaxScaler()
+    data = scaler.fit_transform(data)
+
+    return data
 
 
 def create_base_model(input_dim, output_dim, name='base_model'):
@@ -220,6 +289,17 @@ def training(train_data, train_label, test_data, test_label, users):
         dp_spent_step_freq=dp_spent_step_freq,
     )
 
+        # Evaluate the model
+    evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
+    print(evaluator)
+
+
+    return history, sl_model
+
+
+def predict(sl_model, test_data, output_path, self_party):
+    """预测"""
+
     # predict the test data
     y_pred = sl_model.predict(test_data)
     print(f"type(y_pred) = {type(y_pred)}")
@@ -247,7 +327,7 @@ def training(train_data, train_label, test_data, test_label, users):
         padded_data.append(padded_tensor)
 
     # 将数据转换为TensorFlow张量
-    tensor = tf.convert_to_tensor(tensor, dtype=tf.float32)
+    tensor = tf.convert_to_tensor(padded_data, dtype=tf.float32)
     # 将 tensor 转换为5列的形式
     tensor = tf.reshape(tensor, [-1, 5])
 
@@ -259,14 +339,73 @@ def training(train_data, train_label, test_data, test_label, users):
     # 打印预测结果和真实标签，作为对比
     print(f"predicted_one_hot = {predicted_one_hot}")
 
-    print(sf.reveal(test_label.partitions[carol].data))
+    # print(sf.reveal(test_label.partitions[carol].data))
 
-    # Evaluate the model
-    evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
-    print(evaluator)
+    df = pd.DataFrame(1 + tf.argmax(predicted_one_hot, axis=1))
 
-    return history
+    # output_file = "Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/result.csv"
+    
+    output_file = input('[*] 请输入预测结果保存路径: ')
 
+    df.to_csv(output_file, index=False)
+
+    # 读取 Credit_score_psi.csv 和 result.csv，跳过 result.csv 的第一行
+    credit_score_df = pd.read_csv(output_path[self_party])
+    result_df = pd.read_csv(output_file, header=None, skiprows=1)
+
+    # 合并数据
+
+    merge_data(credit_score_df, result_df, output_file)
+
+    print(f"[✓] 预测结果已保存到： {output_file}")
+
+    return output_file
+
+
+def merge_data(credit_score_df, result_df, output_file):
+    """合并数据"""
+
+    # 找到两者中较短的行数，进行截断
+    min_length = min(len(credit_score_df), len(result_df))
+
+    # 如果 Credit_score_psi.csv 更长，进行截断
+    credit_score_df = credit_score_df.iloc[:min_length]
+
+    # 如果 result.csv 更长，进行截断
+    result_df = result_df.iloc[:min_length]
+
+    # 将 result.csv 中的数值替换到 credit_score_df 的 level 列
+    credit_score_df['level'] = result_df[0]
+
+    # 将修改后的数据保存到新的 CSV 文件中，或者覆盖原文件
+    credit_score_df.to_csv(output_file, index=False)
+
+    print(f"已成功更新 level 列，处理后的行数为 {min_length} 行。")
+
+
+def calculate_transaction_limits(order_amount_path, level_path, output_path):
+    
+    platform = '_'+order_amount_path.split('/')[-1].split('_')[2]
+    # 读取订单金额数据
+    order_amount_df = pd.read_csv(order_amount_path)
+    # 读取评级
+    level_df = pd.read_csv(level_path)
+    
+    # 合并数据
+    # merged_df1 = pd.merge(order_amount_df, on='ID')
+    merged_df = pd.merge(order_amount_df, level_df, on='ID')
+    
+    # 计算加权额度
+    # 假设 'Amount_of_Loss_Total' 是订单误差金额列，'Credit_Score' 是信誉分列
+    merged_df['Weighted_Amount'+platform] = (merged_df['Amount_of_Loss'+platform].max() - merged_df['Amount_of_Loss'+platform]) * (merged_df['level'].max() - merged_df['level'] + 0.5) * (merged_df['level'].max() - merged_df['level'] + 0.5)
+    merged_df['Transaction_Limit'+platform] = merged_df.groupby('ID')['Weighted_Amount'+platform].transform('sum')
+    
+    #去除重复的 ID 行，保留每个 ID 的交易额度
+    transaction_limits = merged_df[['ID', 'Transaction_Limit']].drop_duplicates()
+    
+    transaction_limits.to_csv(output_path, index=False)
+    
+    print(f"[✓] 交易额度已保存到 {output_path}")
 
 def show_mode_result(history):
     """显示模型结果"""

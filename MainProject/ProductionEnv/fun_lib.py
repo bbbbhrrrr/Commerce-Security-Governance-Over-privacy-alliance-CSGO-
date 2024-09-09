@@ -465,7 +465,7 @@ def show_mode_loss(history):
     # Plot the change of loss during training
     plt.plot(history['train_loss'])
     plt.plot(history['val_loss'])
-    plt.title('Model loss')
+    plt.title('Model loss')     
     plt.ylabel('Loss')
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Val'], loc='upper right')

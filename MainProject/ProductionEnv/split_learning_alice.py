@@ -23,7 +23,7 @@ import sys
 import spu
 from secretflow.data.vertical import read_csv
 
-
+        
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 cluster_config ={
