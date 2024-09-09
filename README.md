@@ -1,206 +1,101 @@
-# Commerce Security & Governance Over privacy alliance
+# CSGO: 联邦隐私商业安全保障
 
-## 具体工作
+CSGO: 联邦隐私商业安全保障 （Commerce Security & Governance Over privacy alliance） 是基于 [隐语· SecretFlow](https://www.secretflow.org.cn/zh-CN/) 隐私计算框架，针对当前“先用后付”“仅退款”等电子商务新场景，实现的在不同平台间对购物者信用信息进行隐私共享与联邦学习的解决方案。
 
-- 建立 Github 仓库以及组织|7.11bhr
-- 搭建隐语开发调试环境，能跑起来实例代码，主要 spu 和隐私求交|7.11-7.14all bhr 已完成
-- Dataframe：|7.11-7.16all
-  - 规定数据格式，确定需要的数据和能拿到的数据以及将拿到的数据转化为需要的数据
-  - 设计接口及调用规范
-- 实现功能：|7.16 晚 meeting
-  - 卖家买家 id 共用 |8.7 下午 bhr
-  - 提取 id 行为次数代码实现 |8.7 晚上 gph
-  - 梯度设置 |8.8 bhr&gph
-  - 模型设计 |8.10 zay
-  - 水平联邦，垂直联邦实现 |
-- 调试功能：
-  - 隐私求交
-  - 机器学习
-  - 额度设置
-- 综合功能：
-  - 隐私求交
-  - 机器学习
-  - 额度设置
-  - 优化项目
-- 写项目书
+# 环境要求
 
-  8.20 之前写完代码，10 天写项目书
+- GNU/Linux 
+  - 暂不支持 Windows 与 MacOS
+- Python: 3.10
+- Pip: >= 19.3
+- CPU/Memory: 推荐最低配置 8C16G
 
-## 工作时间线
+# 部署
 
-![image](https://github.com/bbbbhrrrr/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/assets/117459437/7799579b-8fdf-4278-8f36-ac6358e63680)
+## 获取源码
 
-## 注意事项
+```bash
+git clone https://github.com/bbbbhrrrr/Commerce-Security-Governance-Over-privacy-alliance-CSGO-.git
+cd Commerce-Security-Governance-Over-privacy-alliance-CSGO-/
+```
 
-# 代码格式化
+## 安装依赖环境
 
-参数命名规范，注释规范
-边写代码边写文档
+```bash
+python3.10 -m venv venv # 创建 Python 3.10 虚拟环境
+source venv/bin/activate # 激活虚拟环境
+pip install -r requirements.txt # 安装依赖包
+```
+
+**之后的命令都要运行在刚刚创建的虚拟环境下**
+
+## 配置
+
+## 启动 Ray 集群
+
+将以下命令中的 `{IP}` 替换为当前运行机器的 IP 地址，将 `{Port}` 替换为你选择的用于 Ray 集群的端口，运行：
+```bash
+ray start --head --node-ip-address="{IP}" --port="{Port}" --include-dashboard=False --disable-usage-stats
+```
+
+### 初次运行
+
+初次配置直接运行：
+```bash
+python main.py
+```
+根据交互式说明即可生成配置文件。
+
+### 非初次运行
+
+在 `config.py` 存在的情况下，直接运行：
+```bash
+python main.py [-c path/to/config.py]
+```
+即可实现全无人值守运行。
 
 # 数据格式
+## csv数据格式
 
-唯一 id
+在本项目运行时，输入文件全为csv文件，以下将介绍部分文件格式要求。
 
-- 生成数据集（参考淘宝订单格式+用户信息+退款信息/不同平台的格式）bhr/gph 7.21 之前
-  - 特征过于明显：没有付款
-    - 仅退款不退货
-    - 先用后不付
-    - 租用不还
-    - 银行的信用体系
-    - ？闲鱼黄牛恶意购买-只能检测恶意购买
-      - 诈骗-付款不发货
-      - 收货后仅支付订金
-      - B-C、C-C 平台不同策略
-  - 刷订单量
-  - 加上额度和广告推荐
-  - 加上银行和其他支付平台的信用
+### 原始数据
+以 `orders_TB.csv`文件为例，其文件索引如下所示：
+```csv
+Order_ID_TB,Real_Name_User(ID Card),Seller_Information_(ID Card),Product_Information_TB,Product_Amount_TB,Order_Creation_Time_TB,Payment_Time_TB,Shipping_Time_TB,Receiving_Time_TB,Refund_Time_TB,Return_Time_TB,Payment_Amount_TB,Refund_Amount_TB,Platform_Type_TB
+```
+分别代表订单号、用户ID、卖家ID、产品信息、产品价格、订单创建时间、订单支付时间、发货时间、收货时间、退款时间、退货时间、付款金额、退款金额、平台类型。
 
-https://tianchi.aliyun.com/dataset?spm=a2c22.12281976.J_3941670930.19.7e0722fdrEtSvK
+其他平台订单信息类似上文所述。
 
-### 购物平台：
+### 统计数据
+统计数据是根据订单数据统计相关行为后得到的文件。
 
-订单号
-实名用户（身份证）
-商品信息
-应付金额
-订单生成时间
-付款时间
-发货时间
-收货时间
-退款时间
-退货时间
-实付金额
-退款金额
+以 `orders_JD.csv`文件为例，其文件索引如下所示：
+```csv
+ID,Total_Count_JD,Refund_Only_Count_JD,Rental_Not_Returned_Count_JD,Partial_Payment_After_Receipt_Count_JD,Payment_Without_Delivery_Count_JD,Amount_of_Loss_JD
+```
+用户ID、总订单数量、仅退款不退货次数、租用未归还次数、仅支付订金次数、付款不发货次数、损失金额。
 
-### 租用平台：
+其中，支付平台的数据类型格式如下：
+```csv
+ID,Credit_Score
+```
+代表用户ID与信用分。
 
-订单号
-实名用户（身份证）
-商品信息
-商品金额
-订单生成时间
-付款时间
-发货时间
-收货时间
-到期时间
-发回时间
-付款金额
-退款金额
+其他平台订单信息类似上文所述。
 
-### 银行及其他支付平台的信用
 
-用户（身份证）
-信用评定
-银行/支付平台
+### 训练集数据
 
-### 总共：
+训练集数据分为train_data与train_label，train_data为各方所持有的特征数据，train_label为label持有方的标签数据。在该场景中，label为信用等级，label持有方为支付平台。
 
-订单号
-实名用户（身份证）
-商品信息
-商品金额
-订单生成时间
-付款时间
-发货时间
-收货时间
-退款时间
-退货时间
-付款金额
-退款金额
-平台类型
+train_data与统计数据格式相同，train_label格式如下：
+```csv
+ID,Credit_Score,level_Total
+```
+level_Total即为对应的label。
 
-## 安全模型
+### 测试集数据
 
-- 零信任：节点之间完全不信任
-- 半诚实：假设节点不会塞假数据，保证原始数据不出域的情况先实现风控信息的共享
-
-## 隐私求交 bhr/yjh 8.10
-
-使用 kkrt16 模型
-给所有节点做一个全连接，双方的隐私求交
-
-## 梯度设置 bhr/gph
-
-### 目标：
-
-- 仅退款不退货的次数以及可以仅退款不退货的金额额度
-- 限制租用额度
-- 标注问题商家
-- 各个平台信誉分降级
-
-### 分级：
-
-- 优先用户：长时间行为良好
-- 普通用户：默认
-- 风险用户：疑似有恶意行为
-- 恶意用户：确认为恶意行为
-- 封禁用户：恶意行为过多，不允许交易
-
-id 行为总次数 仅退款不退货次数 租用不还次数 收货后仅支付订金次数 付款不发货次数 造成损失金额
-
-### 总恶意行为次数评判：
-
-x、y、z ->次数、金额、比例
-
-总恶意行为次数=$$1/100 * 2 ^ {3* \sum p_i*f_i(x_i,y_i,z_i)}$$
-
-基础公式：ln(x + ln(y) + e\*e^10z)
-
-仅退款不退货次数、金额、比例：ln(x + ln(y) + e\*e^10z) 权重：40%
-租用不还次数、金额、比例：ln(50\*x + e\*ln(y) + e\*e^10z) 权重：20%
-收货后仅支付订金次数、金额、比例：ln(x + e\*ln(y) + e\*e^10z) 权重：30%
-付款不发货次数、金额、比例：ln(x + e^ln(y) + 50\*e^10z) 权重：10%
-
-### 梯度设置规则：
-
-- 优先用户：一周内正常行为多于 10 次且没有恶意行为；或连续 4 次（一个月）都没有恶意行为且购物次数不少于 4 次；或连续 12 次（三个月）都没有恶意行为且购物次数不少于 10 次；或连续 24 次（半年）都没有恶意行为且次数不少于 15 次。
-- 普通用户：没有恶意行为
-- 风险用户：若总行为在 100 次以内，连续四次内恶意行为只有一次；若超过 100 次，恶意行为比例超过 1%
-- 恶意用户：若总行为在 100 次以内，连续四次内恶意行为超过五次；若超过 100 次，恶意行为比例超过 5%
-- 封禁用户：连续四次恶意行为超过 10 次
-
-## 机器学习 zay/gzc/gph 8.10
-
-可以考虑使用 hungging face
-
-机器学习框架
-类型：监督学习或半监督学习（半监督学习难度较大，看所需的数据规模和训练规模）
-监督学习算法：回归分析，统计分析，分类。（若有新功能后期补充，这三个处理数据足够）
-决策方法（暂定）：线性回归分析，GGM 树，神经网络（郑神），KNN 预测等
-
-可视化呈现：Numpy，Pandas，Matplotlib，Scikit-Learn 等工具
-
-用户信誉评估：回归分析（最简单方式，靠谱）
-
-ps：数据的噪声预处理？
-
-### 任务一：确定特征维度与分类数
-
-若为垂直联邦，则不同平台拥有不同维度的特征。此处特征不包括用户的识别码，只包含有用的特征。
-
-分类数即通过这一模型，可以将用户分成多少类，最终呈现效果为：向模型输入一组新的特征，模型输出这一特征符合各分类的概率。
-
-### 任务二：设计神经网络
-
-主要是怎么分层，怎么流，怎么调参。
-
-还要设计 loss 函数。
-
-### 任务三：训练，让模型收敛
-
-其实就是调整神经网络各层各个节点的参数，让模型对“具有对应特征的样本”能够输出一个比较收敛的结果。
-
-### 任务四：拆分，联邦
-
-确定什么平台有什么特征，然后进行联邦，可以参考：[https://www.secretflow.org.cn/zh-CN/docs/secretflow/v1.5.0b0/tutorial/Split_Learning_for_bank_marketing](https://www.secretflow.org.cn/zh-CN/docs/secretflow/v1.5.0b0/tutorial/Split_Learning_for_bank_marketing)
-
-## 结合联邦学习 all
-
-找模型，否则找 2 人研究
-
-初期找一人研究
-
-## 额度设置 all 8.20
-## 项目书
-使用overleaf编辑
-https://cn.overleaf.com/6159414932zbhbptgsfjds#1296a8
+测试集数据的格式与统计数据格式要求相同。
