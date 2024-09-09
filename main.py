@@ -22,8 +22,9 @@ def main(args):
     print("[*] 正在初始化 PYU……")
     partis = cluster_config['parties'].keys()
     users = [f'party_{i+1}' for i in range(len(partis))]
-    for i in range(len(partis)):
-        users[i] = sf.PYU(partis[i])
+    for i, key in enumerate(partis.keys()):
+        users[i] = sf.PYU(partis[key])
+
 
     print("[✓] 初始化完成")
 
