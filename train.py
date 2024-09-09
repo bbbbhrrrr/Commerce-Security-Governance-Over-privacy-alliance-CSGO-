@@ -404,7 +404,7 @@ def calculate_transaction_limits(order_amount_path, output_path,self_party_name)
         print("[x] 无交易额度计算数据，跳过计算")
         return
 
-    plantform = '_' + order_amount_df.split('/')[-1].split('_')[-1].split('.')[0]
+    plantform = '_' + order_amount_path.split('/')[-1].split('_')[-1].split('.')[0]
     
     # 读取订单金额数据和评级
     order_amount_df = pd.read_csv(order_amount_path)
