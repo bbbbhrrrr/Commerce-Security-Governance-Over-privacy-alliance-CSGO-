@@ -312,7 +312,7 @@ def training(train_data, train_label, test_data, test_label, users):
     return history, sl_model
 
 
-def predict(sl_model, test_data, output_path, self_party):
+def level_predict(sl_model, test_data, output_path, self_party):
     """预测"""
 
     # predict the test data

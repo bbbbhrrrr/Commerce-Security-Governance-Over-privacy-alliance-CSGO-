@@ -1,7 +1,7 @@
 import argparse
 import secretflow as sf
 from init import welcome, env_check, skip_check, get_config_triplets
-from train import get_data, gen_train_data, training, show_mode_result, get_predict_data, man_predict_data, predict, calculate_transaction_limits
+from train import get_data, gen_train_data, training, show_mode_result, get_predict_data, man_predict_data, level_predict, calculate_transaction_limits
 
 def work(users, spu, self_party=None, self_party_name=None):
     print("[*] 开始收集数据……")
@@ -36,7 +36,7 @@ def work(users, spu, self_party=None, self_party_name=None):
 
     print("[*] 开始预测……")
 
-    output_file = predict(sl_model, data_pri, output_path, self_party)
+    output_file = level_predict(sl_model, data_pri, output_path, self_party)
 
     print("[*] 开始计算额度限制……")
 
