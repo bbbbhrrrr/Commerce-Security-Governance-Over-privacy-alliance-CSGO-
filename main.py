@@ -20,7 +20,7 @@ def work(users, spu, self_party=None, self_party_name=None):
 
     history, sl_model= training(train_data, train_label, test_data, test_label, users)
 
-    print(f"[✓] 训练完成: {history}")
+    print(f"[✓] 训练完成: {history }")
 
     print("[*] 开始读取预测数据……")
 
@@ -80,7 +80,11 @@ def main(args):
         print(f"[✓] 读取的 cluster_config: {cluster_config}")
         print(f"[✓] cluster_def: {cluster_def}")
 
-        ray_address = input("[*] 请输入本节点 Ray 集群的 URL, 格式为 IP:PORT :")
+        ray_address = None
+        if args.ray_address is None:
+            ray_address = input("[*] 请输入本节点 Ray 集群的 URL, 格式为 IP:PORT :")
+        else:
+            ray_address = args.ray_address[0]
 
         print("[*] 正在初始化 Secretflow 环境……")
         sf.init(address=ray_address, log_to_driver=True,
@@ -103,6 +107,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--ray-address", nargs=1, metavar="IP:PORT", default=None, type=str, help="指定 Ray 集群的地址")
+
     parser.add_argument("-c", nargs=1, metavar="config.py",
                         default="config.py", type=str, help="自定义 config.py 路径")
     parser.add_argument("--no-check", action="store_true",  help="跳过环境检测")
