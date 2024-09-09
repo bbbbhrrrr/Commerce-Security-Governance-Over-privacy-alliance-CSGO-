@@ -77,6 +77,10 @@ def get_party_info():
     parties = {}
     num_parties = int(input("[*] 输入参与方数量: "))
 
+    if num_parties != 3:
+        print("[x] 本项目只支持 3 个参与方")
+        exit(1)
+
     for i in range(num_parties):
         party_name = input(f"[*] 输入参与方{i+1}名称: ").strip()
         address = input(
