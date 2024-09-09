@@ -36,6 +36,8 @@ def get_data(users, spu):
     #     carol:  '/home/lwzheng/workspace/sf/DataGen/leveled_Credit_score.csv'
     # }
 
+    
+
     vdf = read_csv(input_path, spu=spu, keys=key_columns,
                    drop_keys=label_columns, psi_protocl="ECDH_PSI_3PC")
 

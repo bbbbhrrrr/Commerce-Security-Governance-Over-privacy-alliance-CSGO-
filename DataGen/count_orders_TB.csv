@@ -1,4 +1,4 @@
-ID,Total_Count,Refund_Only_Count,Rental_Not_Returned_Count,Partial_Payment_After_Receipt_Count,Payment_Without_Delivery_Count,Amount_of_Loss
+ID,Total_Count_TB,Refund_Only_Count_TB,Rental_Not_Returned_Count_TB,Partial_Payment_After_Receipt_Count_TB,Payment_Without_Delivery_Count_TB,Amount_of_Loss_TB
 450000196805121960,38,0,0,2,3,1583.1599999999999
 640000197109084473,42,0,0,2,4,2896.6
 14000019760715478X,26,0,0,1,6,2447.3099999999995

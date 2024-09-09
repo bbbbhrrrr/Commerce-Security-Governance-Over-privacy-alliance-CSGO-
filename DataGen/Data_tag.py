@@ -71,13 +71,15 @@ def Count(file):
                     results[Producer_ID][5] += Amount_of_Loss
 
     result_file_name = 'count_' + file
+
+    Platform_Type = '_'+file.split('_')[1].split('.')[0]
     # 创建并写入新的CSV文件
     with open(result_file_name, mode='w', encoding='utf-8', newline='') as file:
         csv_writer = csv.writer(file)
 
         # 写入表头
-        csv_writer.writerow(['ID', 'Total_Count', 'Refund_Only_Count', 'Rental_Not_Returned_Count',
-                            'Partial_Payment_After_Receipt_Count', 'Payment_Without_Delivery_Count', 'Amount_of_Loss'])
+        csv_writer.writerow(['ID', 'Total_Count'+Platform_Type, 'Refund_Only_Count'+Platform_Type, 'Rental_Not_Returned_Count'+Platform_Type,
+                            'Partial_Payment_After_Receipt_Count'+Platform_Type, 'Payment_Without_Delivery_Count'+Platform_Type, 'Amount_of_Loss'+Platform_Type])
 
         # 写入每个用户的统计信息
         for user_id, counts in results.items():
@@ -93,18 +95,18 @@ def Count(file):
 '''
 
 
-def classify_user(data_row, data_month, data_half_year):
+def classify_user(data_row, data_month, data_half_year, plantform):
     # 从data_row中提取单行数据
-    total_score = data_row['Total_Score']
-    total_count = data_row['Total_Count']
+    total_score = data_row['Total_Score'+ "_"+plantform]
+    total_count = data_row['Total_Count'+ "_"+plantform]
 
     # 获取对应行在data_month和data_half_year中的数据
     if data_row.name in data_month.index:
-        month_score = data_month.loc[data_row.name, 'Total_Score']
+        month_score = data_month.loc[data_row.name, 'Total_Score'+"_"+plantform]
     else:
         month_score = 0
     if data_row.name in data_half_year.index:
-        half_year_score = data_half_year.loc[data_row.name, 'Total_Score']
+        half_year_score = data_half_year.loc[data_row.name, 'Total_Score'+"_"+plantform]
     else:
         half_year_score = 0
 
@@ -124,17 +126,17 @@ def classify_user(data_row, data_month, data_half_year):
         return 2  # 普通用户
 
 
-def Cale_Total(data):
-    data['Refund_Only_Score'] = np.log(data['Refund_Only_Count'] + np.log(data['Amount_of_Loss']) + np.exp(
-        1) * np.exp(10 * data['Refund_Only_Count'] / data['Total_Count'])).fillna(0)
-    data['Rental_Not_Returned_Score'] = np.log(50 * data['Rental_Not_Returned_Count'] + np.exp(1) * np.log(
-        data['Amount_of_Loss']) + np.exp(1) * np.exp(10 * data['Rental_Not_Returned_Count'] / data['Total_Count'])).fillna(0)
-    data['Partial_Payment_After_Receipt_Score'] = np.log(data['Partial_Payment_After_Receipt_Count'] + np.exp(1) * np.log(
-        data['Amount_of_Loss']) + np.exp(1) * np.exp(10 * data['Partial_Payment_After_Receipt_Count'] / data['Total_Count'])).fillna(0)
-    data['Payment_Without_Delivery_Score'] = np.log(data['Payment_Without_Delivery_Count'] + np.log(
-        data['Amount_of_Loss']) + 50 * np.exp(1) * np.exp(10 * data['Payment_Without_Delivery_Count'] / data['Total_Count'])).fillna(0)
-    data['Total_Score'] = (1/100*(2**(3 * (0.4*data['Refund_Only_Score'] + 0.2*data['Rental_Not_Returned_Score'] +
-                           0.3*data['Partial_Payment_After_Receipt_Score'] + 0.1*data['Payment_Without_Delivery_Score']))-1)).fillna(0)
+def Cale_Total(data, plantform):
+    data['Refund_Only_Score_'+plantform] = np.log(data['Refund_Only_Count_'+plantform] + np.log(data['Amount_of_Loss_'+plantform]) + np.exp(
+        1) * np.exp(10 * data['Refund_Only_Count_'+plantform] / data['Total_Count_'+plantform])).fillna(0)
+    data['Rental_Not_Returned_Score_'+plantform] = np.log(50 * data['Rental_Not_Returned_Count_'+plantform] + np.exp(1) * np.log(
+        data['Amount_of_Loss_'+plantform]) + np.exp(1) * np.exp(10 * data['Rental_Not_Returned_Count_'+plantform] / data['Total_Count_'+plantform])).fillna(0)
+    data['Partial_Payment_After_Receipt_Score_'+plantform] = np.log(data['Partial_Payment_After_Receipt_Count_'+plantform] + np.exp(1) * np.log(
+        data['Amount_of_Loss_'+plantform]) + np.exp(1) * np.exp(10 * data['Partial_Payment_After_Receipt_Count_'+plantform] / data['Total_Count_'+plantform])).fillna(0)
+    data['Payment_Without_Delivery_Score_'+plantform] = np.log(data['Payment_Without_Delivery_Count_'+plantform] + np.log(
+        data['Amount_of_Loss_'+plantform]) + 50 * np.exp(1) * np.exp(10 * data['Payment_Without_Delivery_Count_'+plantform] / data['Total_Count_'+plantform])).fillna(0)
+    data['Total_Score_'+plantform] = (1/100*(2**(3 * (0.4*data['Refund_Only_Score_'+plantform] + 0.2*data['Rental_Not_Returned_Score_'+plantform] +
+                           0.3*data['Partial_Payment_After_Receipt_Score_'+plantform] + 0.1*data['Payment_Without_Delivery_Score_'+plantform]))-1)).fillna(0)
     return data
 
 
@@ -143,31 +145,32 @@ def Level(file1, file2, file3):
     Count(file2)
     Count(file3)
     # 加载
+    plantform =  file1.split('_')[1].split('.')[0]
 
     data1 = pd.read_csv('count_' + file1)
     data2 = pd.read_csv('count_' + file2)
     data3 = pd.read_csv('count_' + file3)
 
     # 基础恶意行为分数
-    data1 = Cale_Total(data1)
-    data2 = Cale_Total(data2)
-    data3 = Cale_Total(data3)
+    data1 = Cale_Total(data1, plantform)
+    data2 = Cale_Total(data2, plantform)
+    data3 = Cale_Total(data3, plantform)
 
-    data1['level'] = data1.apply(classify_user, args=(data2, data3), axis=1)
+    data1['level'+ '_'+plantform] = data1.apply(classify_user, args=(data2, data3,plantform), axis=1)
+    plantform="_"+plantform
 
     # 需要删除的列列表
     columns_to_drop = [
-        'Refund_Only_Score',
-        'Rental_Not_Returned_Score',
-        'Partial_Payment_After_Receipt_Score',
-        'Payment_Without_Delivery_Score',
-        'Total_Score'
+        'Refund_Only_Score'+plantform,
+        'Rental_Not_Returned_Score'+plantform,
+        'Partial_Payment_After_Receipt_Score'+plantform,
+        'Payment_Without_Delivery_Score'+plantform,
+        'Total_Score'+plantform
     ]
 
     # 删除指定的列
     data_to_save = data1.drop(columns=columns_to_drop)
-
-    plantform = file1.split('_')[1].split('.')[0]
+    plantform=plantform.split('_')[1]
     # 保存数据集
     data_to_save.to_csv('leveled_' + file1, index=False, header=['ID', 'Total_Count_'+plantform, 'Refund_Only_Count_'+plantform, 'Rental_Not_Returned_Count_' +
                         plantform, 'Partial_Payment_After_Receipt_Count_'+plantform, 'Payment_Without_Delivery_Count_'+plantform, 'Amount_of_Loss_'+plantform, 'level_'+plantform])
@@ -185,7 +188,7 @@ if __name__ == '__main__':
     file5 = 'orders_JD_Month.csv'
     file6 = 'orders_JD_Half_Year.csv'
     Level(file4,file5,file6)   
-    file7 = 'orders_Total.csv'
-    file8 = 'orders_Total_Month.csv'
-    file9 = 'orders_Total_Half_Year.csv'
-    Level(file7,file8,file9)
+    # file7 = 'orders_Total.csv'
+    # file8 = 'orders_Total_Month.csv'
+    # file9 = 'orders_Total_Half_Year.csv'
+    # Level(file7,file8,file9)
