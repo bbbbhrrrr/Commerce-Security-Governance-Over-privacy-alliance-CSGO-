@@ -170,8 +170,9 @@ alice = sf.PYU('alice')
 bob = sf.PYU('bob')
 carol = sf.PYU('carol')
 
+users = [alice, bob, carol]
 
-def gen_data(sf):
+def gen_data(users):
 
     # init log
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -181,11 +182,22 @@ def gen_data(sf):
     label_columns = ['ID']
     spu = sf.SPU(cluster_def, link_desc)
 
-    input_path = {
-        alice: '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_JD.csv',
-        bob:  '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_TB.csv',
-        carol:  '/home/lwzheng/workspace/sf/DataGen/leveled_Credit_score.csv'
-    }
+    # 初始化一个空字典来存储路径
+    input_path = {}
+
+    # 预定义的用户
+
+    # 接受每个用户的输入
+    for user in users:
+        path = input(f"请输入 {user} 的文件路径: ")
+        input_path[user] = path
+
+        
+    # input_path = {
+    #     alice: '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_JD.csv',
+    #     bob:  '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_TB.csv',
+    #     carol:  '/home/lwzheng/workspace/sf/DataGen/leveled_Credit_score.csv'
+    # }
 
     vdf = read_csv(input_path, spu=spu, keys=key_columns,
                    drop_keys=label_columns, psi_protocl="ECDH_PSI_3PC")
@@ -232,14 +244,8 @@ def gen_data(sf):
     label_TB = encoder.fit_transform(label_TB)
     label = encoder.fit_transform(label)
 
-    # print(f"label_JD = {type(label_JD)},\n label_TB= {type(label_TB)},\n data= {type(data)}")
-
     scaler = MinMaxScaler()
     data = scaler.fit_transform(data)
-
-    # print("===============this is data=====================")
-    # print(data)
-    # print("================this is data====================")
 
     random_state = 1234
     train_data, test_data = train_test_split(
@@ -257,30 +263,28 @@ train_data, test_data, train_label, test_label = gen_data(sf)
 
 
 def calculate_transaction_limits(order_amount_path, credit_score_path, output_path):
-
+    
     # 读取订单金额数据
     order_amount_df = pd.read_csv(order_amount_path)
-
+    
     # 读取信誉分数据
     credit_score_df = pd.read_csv(credit_score_path)
-
+    
     # 合并数据
     merged_df = pd.merge(order_amount_df, credit_score_df, on='ID')
-
+    
     # 计算加权额度
-    # 假设 'Amount_of_Loss_Total' 是订单金额列，'Credit_Score' 是信誉分列
-    merged_df['Weighted_Amount'] = merged_df['Amount_of_Loss_Total'] * \
-        (merged_df['Credit_Score'] / merged_df['Credit_Score'].max())
-    merged_df['Transaction_Limit'] = merged_df.groupby(
-        'ID')['Weighted_Amount'].transform('sum')
-
-    # 去除重复的 ID 行，保留每个 ID 的交易额度
-    transaction_limits = merged_df[[
-        'ID', 'Transaction_Limit']].drop_duplicates()
-
+    # 假设 'Amount_of_Loss_Total' 是订单误差金额列，'Credit_Score' 是信誉分列
+    merged_df['Weighted_Amount'] = (merged_df['Amount_of_Loss_Total'].max() - merged_df['Amount_of_Loss_Total']) * (merged_df['Credit_Score'] * merged_df['Credit_Score'] / merged_df['Credit_Score'].max())
+    merged_df['Transaction_Limit'] = merged_df.groupby('ID')['Weighted_Amount'].transform('sum')
+    
+    #去除重复的 ID 行，保留每个 ID 的交易额度
+    transaction_limits = merged_df[['ID', 'Transaction_Limit']].drop_duplicates()
+    
     transaction_limits.to_csv(output_path, index=False)
-
+    
     print(f"交易额度已保存到 {output_path}")
+
 
 
 def create_base_model(input_dim, output_dim, name='base_model'):
@@ -395,7 +399,7 @@ def training(train_data, train_label, test_data, test_label):
         verbose=1,
         validation_freq=1,
         dp_spent_step_freq=dp_spent_step_freq,
-    )
+    )               
 
     # predict the test data
     y_pred = sl_model.predict(test_data)
@@ -434,7 +438,7 @@ def training(train_data, train_label, test_data, test_label):
     predicted_one_hot = tf.one_hot(max_indices, depth=tensor.shape[1])
 
     # 打印预测结果和真实标签，作为对比
-    print(f"predicted_one_hot = {predicted_one_hot}")
+    print(f"predicted_one_hot = {predicted_one_hot}")        
 
     print(sf.reveal(test_label.partitions[carol].data))
 
@@ -442,8 +446,9 @@ def training(train_data, train_label, test_data, test_label):
     evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
     print(evaluator)
 
+
     # 调用函数
-    order_amount_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Total.csv'
+    order_amount_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Total.csv'        
     credit_score_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Credit_score.csv'
     output_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/transaction_limits.csv'
 

@@ -1,27 +1,19 @@
-import sys, traceback, os, spu, importlib.util
-import secretflow as sf
-import matplotlib.pyplot as plt
-import pandas as pd
+import sys
+import traceback
+import os
+import spu
 from secretflow.utils.simulation.datasets import dataset
 from secretflow.data.split import train_test_split
-from secretflow.ml.nn import SLModel
 from secretflow.utils.simulation.datasets import load_bank_marketing
-from secretflow.preprocessing.scaler import MinMaxScaler
-from secretflow.preprocessing.encoder import LabelEncoder
-from secretflow.data.vertical import read_csv
-from secretflow.security.privacy import DPStrategy, LabelDP
-from secretflow.security.privacy.mechanism.tensorflow import GaussianEmbeddingDP
-from secretflow.preprocessing.encoder import OneHotEncoder
-import tensorflow as tf
-import numpy as np
-import logging
 from secretflow.data.vertical import read_csv
 import re
+
 
 def welcome():
     print("[*] 欢迎使用本项目，首先我们需要进行一些环境检测……")
     print("[*] 可以使用 --no-check 参数运行 main.py 跳过检测")
     print("")
+
 
 def check_pyver():
 
@@ -32,10 +24,11 @@ def check_pyver():
         print(f"[x] 本项目不兼容 Python {pyver}!")
         print(f"[x] 请使用 Python 3.10 版本运行本项目")
         exit(1)
-    else :
+    else:
         print("[✓]该 Python 版本与本项目兼容")
-    
+
     print("")
+
 
 def check_sf():
 
@@ -43,25 +36,27 @@ def check_sf():
 
     try:
         import secretflow as sf
-    
+
     except ModuleNotFoundError:
         print("[x] 检测到您没有安装 secretflow 依赖包")
         print("[x] 建议运行 pip install -r requirements.txt 以安装本项目的依赖包")
         exit(1)
-    
+
     except Exception as e:
         print("[x] 未知错误，以下是错误信息: ")
         tb = traceback.format_exc()
         print(f"{type(e).__name__}: {str(e)}")
         print(tb)
         exit(1)
-    
+
     else:
         print("[✓] 检测到所有依赖已经满足")
+
 
 def env_check():
     check_pyver()
     check_sf()
+
 
 def skip_check():
     print("[*] 跳过环境检测")
@@ -84,10 +79,12 @@ def get_party_info():
 
     for i in range(num_parties):
         party_name = input(f"[*] 输入参与方{i+1}名称: ").strip()
-        address = input(f"[*] 输入 {party_name} 的 IP 和 Proxy 端口 (格式: IP:PORT): ").strip()
+        address = input(
+            f"[*] 输入 {party_name} 的 IP 和 Proxy 端口 (格式: IP:PORT): ").strip()
         while not is_valid_ip_port(address):
             print("[x] 输入的地址格式错误，请重新输入。")
-            address = input(f"[*] 输入 {party_name} 的 IP 和 Proxy 端口 (格式: IP:PORT): ").strip()
+            address = input(
+                f"[*] 输入 {party_name} 的 IP 和 Proxy 端口 (格式: IP:PORT): ").strip()
         # listen_port = input(f"[*] 输入 {party_name} 的 Proxy 监听端口: ").strip()
         listen_port = address.split(":")[1]
 
@@ -97,6 +94,7 @@ def get_party_info():
         }
 
     return parties
+
 
 def create_cluster_config():
     """通过交互生成 cluster_config"""
@@ -110,6 +108,7 @@ def create_cluster_config():
 
     return cluster_config
 
+
 def save_config(cluster_config, directory='config.py'):
     """将 cluster_config 保存到指定的文件路径"""
     try:
@@ -119,11 +118,12 @@ def save_config(cluster_config, directory='config.py'):
     except Exception as e:
         print(f"[x] 保存配置时出现错误: {e}")
 
+
 def load_config(path):
     """尝试从指定路径加载配置"""
     if not os.path.exists(path):
         raise FileNotFoundError(f"[x] 配置文件 {path} 不存在。")
-    
+
     try:
         config = {}
         with open(path, 'r') as f:
@@ -133,6 +133,7 @@ def load_config(path):
         return config['cluster_config']
     except Exception as e:
         raise RuntimeError(f"[x] 加载配置时出现错误: {e}")
+
 
 def get_cluster_config(config_path='config.py'):
     """
@@ -160,8 +161,9 @@ def get_cluster_config(config_path='config.py'):
             return cluster_config
         else:
             return None
-        
-def gen_cluster_def_from_cc(cluster_config:dict) -> dict:
+
+
+def gen_cluster_def_from_cc(cluster_config: dict) -> dict:
     print("[*] 默认使用各节点的 Proxy 端口 + 10000 作为 SPU 端口")
     cluster_def = {
         'nodes': [],
@@ -175,8 +177,8 @@ def gen_cluster_def_from_cc(cluster_config:dict) -> dict:
     for i in range(len(cluster_config)):
         party_ids.append(f'local"{i}')
 
-    for i, (party, addr) in enumerate(cluster_config['parties'].items()):  
-    #    print(i)
+    for i, (party, addr) in enumerate(cluster_config['parties'].items()):
+        #    print(i)
         cluster_def["nodes"].append(
             {
                 'party': party,
@@ -187,6 +189,7 @@ def gen_cluster_def_from_cc(cluster_config:dict) -> dict:
 
     # print(cluster_def)
     return cluster_def
+
 
 def get_config_triplets(args):
     cluster_config = get_cluster_config(args.c)
@@ -204,5 +207,3 @@ def get_config_triplets(args):
     }
 
     return cluster_config, cluster_def, link_desc
-
-    

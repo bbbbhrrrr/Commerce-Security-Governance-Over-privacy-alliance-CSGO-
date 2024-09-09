@@ -1,7 +1,7 @@
 import argparse
 import secretflow as sf
 from init import welcome, env_check, skip_check, get_config_triplets
-from train import get_data, gen_train_data, training,show_mode_result
+from train import get_data, gen_train_data, training, show_mode_result
 
 
 def main(args):
@@ -13,7 +13,8 @@ def main(args):
     ray_address = input("[*] 请输入本节点 Ray 集群的 URL, 格式为 IP:PORT :")
 
     print("[*] 正在初始化 Secretflow 环境……")
-    sf.init(address=ray_address, log_to_driver=True, cluster_config=cluster_config)
+    sf.init(address=ray_address, log_to_driver=True,
+            cluster_config=cluster_config)
 
     print("[*] 正在初始化 SPU 环境……")
     spu = sf.SPU(cluster_def, link_desc)
@@ -31,7 +32,7 @@ def main(args):
     vdf = get_data(users, spu)
 
     print(f"[✓] 数据收集完成: {vdf}")
-    
+
     print("[*] 开始生成训练数据……")
 
     train_data, test_data, train_label, test_label = gen_train_data(vdf)
@@ -43,7 +44,6 @@ def main(args):
     history = training(train_data, train_label, test_data, test_label, users)
 
     print(f"[✓] 训练完成: {history}")
-
 
     # print("[*] 开始计算额度限制……")1
 
@@ -61,11 +61,11 @@ def main(args):
 
     print("[✓] 所有任务完成，程序退出")
 
-        
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", nargs=1, metavar="config.py",  default="config.py", type=str, help="自定义 config.py 路径")
+    parser.add_argument("-c", nargs=1, metavar="config.py",
+                        default="config.py", type=str, help="自定义 config.py 路径")
     parser.add_argument("--no-check", action="store_true",  help="跳过环境检测")
     args = parser.parse_args()
 

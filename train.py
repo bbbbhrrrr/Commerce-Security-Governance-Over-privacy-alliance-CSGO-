@@ -1,4 +1,3 @@
-import sys, traceback, os, spu, importlib.util
 import secretflow as sf
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -14,9 +13,7 @@ from secretflow.security.privacy.mechanism.tensorflow import GaussianEmbeddingDP
 from secretflow.preprocessing.encoder import OneHotEncoder
 import tensorflow as tf
 import numpy as np
-import logging
 from secretflow.data.vertical import read_csv
-import re
 
 
 
@@ -33,7 +30,6 @@ def get_data(users, spu):
         path = input(f"请输入 {user} 的文件路径: ")
         input_path[user] = path
 
-        
     # input_path = {
     #     alice: '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_JD.csv',
     #     bob:  '/home/bbbbhrrrr/CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_TB.csv',
@@ -42,7 +38,7 @@ def get_data(users, spu):
 
     vdf = read_csv(input_path, spu=spu, keys=key_columns,
                    drop_keys=label_columns, psi_protocl="ECDH_PSI_3PC")
-    
+
     return vdf
 
 
@@ -55,7 +51,6 @@ def gen_train_data(vdf):
 
     # 删除标签列
     data = vdf.drop(columns=["level_JD", "level_TB", "level_Total"])
-
 
     # 对数据进行编码
     encoder = LabelEncoder()
@@ -162,6 +157,7 @@ def create_fuse_model(input_dim, output_dim, party_nums, name='fuse_model'):
 
     return create_model
 
+
 def training(train_data, train_label, test_data, test_label, users):
     """训练模型"""
 
@@ -220,7 +216,7 @@ def training(train_data, train_label, test_data, test_label, users):
         verbose=1,
         validation_freq=1,
         dp_spent_step_freq=dp_spent_step_freq,
-    )               
+    )
 
     # predict the test data
     y_pred = sl_model.predict(test_data)
@@ -259,7 +255,7 @@ def training(train_data, train_label, test_data, test_label, users):
     predicted_one_hot = tf.one_hot(max_indices, depth=tensor.shape[1])
 
     # 打印预测结果和真实标签，作为对比
-    print(f"predicted_one_hot = {predicted_one_hot}")        
+    print(f"predicted_one_hot = {predicted_one_hot}")
 
     print(sf.reveal(test_label.partitions[carol].data))
 
@@ -268,7 +264,6 @@ def training(train_data, train_label, test_data, test_label, users):
     print(evaluator)
 
     return history
-
 
 
 def show_mode_result(history):
@@ -303,5 +298,6 @@ def show_mode_result(history):
     plt.legend(['Train', 'Val'], loc='upper left')
 
     plt.tight_layout()
-    plt.savefig('/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/model_results.png')
+    plt.savefig(
+        '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/model_results.png')
     plt.show()

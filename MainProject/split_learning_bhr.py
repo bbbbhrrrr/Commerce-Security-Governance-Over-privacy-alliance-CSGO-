@@ -29,9 +29,9 @@ sf.init(['alice', 'bob','carol'], address='local')
 alice, bob,carol = sf.PYU('alice'), sf.PYU('bob'), sf.PYU('carol')
 
 path_dict = {
-    alice: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_orders_JD.csv',
-    bob: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_orders_TB.csv',
-    carol: 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_Credit_score.csv'
+    alice: '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_JD.csv',
+    bob: '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_TB.csv',
+    carol: '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Credit_score.csv'
 
 }
 
@@ -264,8 +264,11 @@ for tensor in data:
 
 # 将数据转换为TensorFlow张量
 tensor = tf.convert_to_tensor(tensor, dtype=tf.float32)
+# print(f"tensor = {tensor}")
 # 将 tensor 转换为5列的形式
 tensor = tf.reshape(tensor, [-1, 5])
+
+# print(f"tensor = {tensor}")
 
 # 找到每行最大值的索引
 max_indices = tf.argmax(tensor, axis=1)
@@ -274,17 +277,28 @@ predicted_one_hot = tf.one_hot(max_indices, depth=tensor.shape[1])
 
 # 打印预测结果和真实标签，作为对比
 print(f"predicted_one_hot = {predicted_one_hot}")
-
+print(sf.reveal)
 print(sf.reveal(test_label.partitions[carol].data))
+
+import pandas as pd
+
+# 假设 revealed_data 是一个 pandas DataFrame
+revealed_data = sf.reveal(test_label.partitions[carol].data)
+
+# 将 DataFrame 完整地保存到文件
+with open('output.txt', 'w') as file:
+    file.write(revealed_data.to_string())
+
+
 
 # Evaluate the model
 evaluator = sl_model.evaluate(test_data, test_label, batch_size=10)
 print(evaluator)
 
 # 调用函数
-order_amount_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_Total.csv'
-credit_score_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/leveled_Credit_score.csv'
-output_path = 'Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/transaction_limits.csv'
+order_amount_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Total.csv'
+credit_score_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_Credit_score.csv'
+output_path = '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/transaction_limits.csv'
 
 calculate_transaction_limits(order_amount_path, credit_score_path, output_path)
 
