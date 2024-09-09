@@ -20,10 +20,11 @@ def main(args):
     spu = sf.SPU(cluster_def, link_desc)
 
     print("[*] 正在初始化 PYU……")
-    partis = cluster_config['parties'].keys()
+    partis = cluster_config['parties'].keys()  # 仍然是 dict_keys
     users = [f'party_{i+1}' for i in range(len(partis))]
-    for i, key in enumerate(partis.keys()):
-        users[i] = sf.PYU(partis[key])
+    for i, key in enumerate(partis):  # 直接使用 partis，无需再调用 .keys()
+        users[i] = sf.PYU(key)  # 使用 dict 的键而不是通过下标访问
+
 
 
     print("[✓] 初始化完成")
