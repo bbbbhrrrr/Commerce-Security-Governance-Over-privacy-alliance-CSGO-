@@ -44,6 +44,8 @@ def get_data(users, spu):
 def get_predict_data(users, spu, self_party=None):
     """获取预测数据"""
     # 初始化一个空字典来存储路径
+
+    print('#################self:',self_party)
     input_path = {}
     # 接受每个用户的输入
     for user in users:
@@ -55,6 +57,7 @@ def get_predict_data(users, spu, self_party=None):
     for user in users:
         path = input(f"请输入 {user} 的输出路径: ")
         output_path[user] = path
+
 
 
     spu.psi_csv(
