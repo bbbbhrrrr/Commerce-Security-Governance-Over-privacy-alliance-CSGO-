@@ -11,4 +11,3 @@ def data_psi(parties:list, spu:sf.SPU):
         members.append(sf.PYU(party))
     
     # 做隐私求交即可
-
