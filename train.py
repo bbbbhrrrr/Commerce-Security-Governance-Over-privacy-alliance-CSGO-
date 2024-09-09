@@ -398,13 +398,11 @@ def merge_data(credit_score_df, result_df, output_file):
     print(f"已成功更新 level 列，处理后的行数为 {min_length} 行。")
 
 
-def calculate_transaction_limits(order_amount_path, output_path,self_party_name):
+def calculate_transaction_limits(plantform,order_amount_path, output_path,self_party_name):
 
     if self_party_name == 'carol':
         print("[x] 无交易额度计算数据，跳过计算")
         return
-
-    plantform = '_' + order_amount_path.split('/')[-1].split('_')[-1].split('.')[0]
     
     # 读取订单金额数据和评级
     order_amount_df = pd.read_csv(order_amount_path)

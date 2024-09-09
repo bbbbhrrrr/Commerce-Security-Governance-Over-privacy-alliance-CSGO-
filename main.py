@@ -40,9 +40,11 @@ def work(users, spu, self_party=None, self_party_name=None):
 
     print("[*] 开始计算额度限制……")
 
+    plantform = '_' + input_path[self_party].split('/')[-1].split('_')[-1].split('.')[0]
+
     result_path = input("[*] 请输入结果文件路径：")
 
-    calculate_transaction_limits(input_path[self_party], result_path, self_party_name)
+    calculate_transaction_limits(plantform,output_file,result_path,self_party_name)
 
     print("[*] 训练结果展示：")
     show_mode_result(history)
