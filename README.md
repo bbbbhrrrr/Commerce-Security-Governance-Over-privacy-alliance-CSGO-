@@ -102,7 +102,36 @@ level_Total即为对应的label。
 
 测试集数据的格式与统计数据格式要求相同。
 
-
 # 运行
 
 根据交互式终端界面输入对应的信息即可，示例信息参考 cmd.txt
+
+## 生成数据集
+
+在`DataGen`文件夹中运行`Data_gen.py`即可生成数据，默认生成两方电子平台与支付平台的订单信息。
+
+若需修改总订单量，即修改对应数量即可：
+```python
+for _ in tqdm(range(100000)):  # 生成100000个随机订单
+```
+其余各类订单量同理。
+
+## 统计数据
+若要对数据集进行统计处理，运行`Data_tag.py`。
+
+对于不同的数据集，只需修改代码中的下列文件名信息即可。
+```python
+if __name__ == '__main__':
+    file1 = 'orders_TB.csv'
+    file2 = 'orders_TB_Month.csv'
+    file3 = 'orders_TB_Half_Year.csv'
+    Level(file1,file2,file3)
+    file4 = 'orders_JD.csv'
+    file5 = 'orders_JD_Month.csv'
+    file6 = 'orders_JD_Half_Year.csv'
+    Level(file4,file5,file6)   
+    # file7 = 'orders_Total.csv'
+    # file8 = 'orders_Total_Month.csv'
+    # file9 = 'orders_Total_Half_Year.csv'
+    # Level(file7,file8,file9)
+```
