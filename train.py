@@ -32,6 +32,7 @@ def get_data(users, spu, self_party=None):
     # 接受每个用户的输入
     for user in users:
         if self_party is not None and user != self_party:
+            input_path[user] = None
             continue
         path = input(f"{BLUE}[*] 请输入 {user} 的文件路径: {ENDC}")
         input_path[user] = path
@@ -57,6 +58,7 @@ def get_predict_data(users, spu, self_party=None):
     # 接受每个用户的输入
     for user in users:
         if self_party is not None and user != self_party:
+            input_path[user] = None
             continue
         path = input(f"{BLUE}[*] 请输入 {user} 的文件路径: {ENDC}")
         input_path[user] = path
@@ -66,6 +68,7 @@ def get_predict_data(users, spu, self_party=None):
     
     for user in users:
         if self_party is not None and user != self_party:
+            input_path[user] = None
             continue
         path = input(f"{BLUE}[*] 请输入 {user} 的输出路径: {ENDC}")
         output_path[user] = path
