@@ -31,7 +31,16 @@ pip install -r requirements.txt # 安装依赖包
 
 **之后的命令都要运行在刚刚创建的虚拟环境下**
 
+## 调试运行
+
+```bash
+python main.py --debug
+```
+将会开启调试模式，全部计算将会在本机模拟运行
+
+
 ## 配置
+
 
 ## 启动 Ray 集群
 
@@ -39,6 +48,8 @@ pip install -r requirements.txt # 安装依赖包
 ```bash
 ray start --head --node-ip-address="{IP}" --port="{Port}" --include-dashboard=False --disable-usage-stats
 ```
+
+
 
 ### 初次运行
 
