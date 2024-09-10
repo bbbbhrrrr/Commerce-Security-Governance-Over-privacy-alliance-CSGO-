@@ -413,7 +413,7 @@ def merge_data(credit_score_df, result_df, output_file):
 
 def calculate_transaction_limits(plantform,order_amount_path, output_path,self_party_name):
 
-    if self_party_name == ' ':
+    if self_party_name == 'carol':
         print(f"{RED}[x] 无交易额度计算数据，跳过计算{ENDC}")
         return
     
