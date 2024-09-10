@@ -1,0 +1,1 @@
+cluster_config = {'parties': {'alice': {'address': '192.168.141.89:9000', 'listen_addr': '0.0.0.0:9000'}, 'bob': {'address': '192.168.141.141:9000', 'listen_addr': '0.0.0.0:9000'}, 'carol': {'address': '192.168.141.11:9000', 'listen_addr': '0.0.0.0:9000'}}, 'self_party': 'alice'}

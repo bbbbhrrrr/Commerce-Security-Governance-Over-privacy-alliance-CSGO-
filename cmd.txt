@@ -1,0 +1,62 @@
+以下是用于演示视频的命令：
+
+
+
+ray start --head --node-ip-address="192.168.141.89" --port="20000" --include-dashboard=False --disable-usage-stats
+
+ray start --head --node-ip-address="192.168.141.141" --port="20000" --include-dashboard=False --disable-usage-stats
+
+ray start --head --node-ip-address="192.168.141.11" --port="20000" --include-dashboard=False --disable-usage-stats
+
+python main.py --ray-address 192.168.141.89:20000
+python main.py --ray-address 192.168.141.141:20000
+python main.py --ray-address 192.168.141.11:20000
+
+
+192.168.141.89:9000
+192.168.141.141:9000
+192.168.141.11:9000
+
+
+/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/leveled_orders_JD.csv
+
+/home/lwzheng/workspace/sf/DataGen/leveled_orders_TB.csv
+
+/home/lwzheng/workspace/sf/DataGen/leveled_Credit_score.csv
+
+
+
+/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/count_orders_JD.csv
+
+/home/lwzheng/workspace/sf/DataGen/count_orders_TB.csv
+
+/home/lwzheng/workspace/sf/DataGen/Credit_score.csv
+
+
+/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/count_orders_JD_psi.csv
+
+/home/lwzheng/workspace/sf/DataGen/count_orders_TB_psi.csv
+
+/home/lwzheng/workspace/sf/DataGen/Credit_score_psi.csv
+
+
+
+/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/result.csv
+
+/home/lwzheng/workspace/sf/DataGen/result.csv
+
+/home/lwzheng/workspace/sf/DataGen/result.csv
+
+
+/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/transaction_limits.csv
+
+/home/lwzheng/workspace/sf/DataGen/transaction_limits.csv
+
+/home/lwzheng/workspace/sf/DataGen/transaction_limits.csv
+
+
+/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/DataGen/model.png
+
+/home/lwzheng/workspace/sf/DataGen/model.png
+
+/home/lwzheng/workspace/sf/DataGen/model.png

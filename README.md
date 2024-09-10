@@ -12,6 +12,8 @@ CSGO: 联邦隐私商业安全保障 （Commerce Security & Governance Over priv
 
 # 部署
 
+cmd.txt 是用于演示视频的命令
+
 ## 获取源码
 
 ```bash
@@ -42,7 +44,7 @@ ray start --head --node-ip-address="{IP}" --port="{Port}" --include-dashboard=Fa
 
 初次配置直接运行：
 ```bash
-python main.py
+python main.py 
 ```
 根据交互式说明即可生成配置文件。
 
@@ -50,7 +52,7 @@ python main.py
 
 在 `config.py` 存在的情况下，直接运行：
 ```bash
-python main.py [-c path/to/config.py]
+python main.py [-c path/to/config.py] --ray-address IP:PORT
 ```
 即可实现全无人值守运行。
 
@@ -99,3 +101,8 @@ level_Total即为对应的label。
 ### 测试集数据
 
 测试集数据的格式与统计数据格式要求相同。
+
+
+# 运行
+
+根据交互式终端界面输入对应的信息即可，示例信息参考 cmd.txt
