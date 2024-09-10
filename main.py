@@ -12,13 +12,10 @@ BLUE = '\033[94m'
 
 
 def work(users, spu, self_party=None, self_party_name=None):
-    if self_party is None:  # 本地调试模式下，self_party 设为 alice
-        self_party = users[0]
-        self_party_name = 'alice'
 
     print(f"{BLUE}[*] 开始收集数据……{ENDC}")
 
-    vdf = get_data(users, spu)
+    vdf = get_data(users, spu, self_party)
 
     print(f"{GREEN}[✓] 数据收集完成: {vdf}{ENDC}")
 
@@ -36,7 +33,7 @@ def work(users, spu, self_party=None, self_party_name=None):
 
     print(f"{BLUE}[*] 开始读取预测数据……{ENDC}")
 
-    vdf2 , output_path, input_path= get_predict_data(users, spu)
+    vdf2 , output_path, input_path= get_predict_data(users, spu, self_party)
 
     print(f"{GREEN}[✓] 预测数据读取完成: {vdf2}{ENDC}")
 
@@ -47,6 +44,10 @@ def work(users, spu, self_party=None, self_party_name=None):
     print(f"{GREEN}[✓] 预测数据处理完成: {data_pri}{ENDC}")
 
     print(f"{BLUE}[*] 开始预测……{ENDC}")
+    
+    if self_party is None:  # 本地调试模式下，self_party 设为 alice
+        self_party = users[0]
+        self_party_name = 'alice'
 
     output_file = level_predict(sl_model, data_pri, output_path, self_party)
 

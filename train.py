@@ -21,7 +21,7 @@ GREEN = '\033[92m'
 YELLOW = '\033[93m'
 BLUE = '\033[94m'
 
-def get_data(users, spu):
+def get_data(users, spu, self_party=None):
     """获取数据"""
 
     key_columns = ['ID']
@@ -31,6 +31,8 @@ def get_data(users, spu):
     input_path = {}
     # 接受每个用户的输入
     for user in users:
+        if self_party is not None and user != self_party:
+            continue
         path = input(f"{BLUE}[*] 请输入 {user} 的文件路径: {ENDC}")
         input_path[user] = path
 
@@ -46,7 +48,7 @@ def get_data(users, spu):
     return vdf
 
 
-def get_predict_data(users, spu):
+def get_predict_data(users, spu, self_party=None):
     """获取预测数据"""
 
     # 初始化一个空字典来存储路径
@@ -54,6 +56,8 @@ def get_predict_data(users, spu):
     input_path = {}
     # 接受每个用户的输入
     for user in users:
+        if self_party is not None and user != self_party:
+            continue
         path = input(f"{BLUE}[*] 请输入 {user} 的文件路径: {ENDC}")
         input_path[user] = path
 
@@ -61,6 +65,8 @@ def get_predict_data(users, spu):
 
     
     for user in users:
+        if self_party is not None and user != self_party:
+            continue
         path = input(f"{BLUE}[*] 请输入 {user} 的输出路径: {ENDC}")
         output_path[user] = path
 
@@ -405,7 +411,7 @@ def merge_data(credit_score_df, result_df, output_file):
 
 def calculate_transaction_limits(plantform,order_amount_path, output_path,self_party_name):
 
-    if self_party_name == 'carol':
+    if self_party_name == ' ':
         print(f"{RED}[x] 无交易额度计算数据，跳过计算{ENDC}")
         return
     
