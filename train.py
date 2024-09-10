@@ -15,6 +15,11 @@ import tensorflow as tf
 import numpy as np
 from secretflow.data.vertical import read_csv
 
+ENDC = '\033[0m'
+RED = '\033[91m'
+GREEN = '\033[92m'
+YELLOW = '\033[93m'
+BLUE = '\033[94m'
 
 def get_data(users, spu):
     """获取数据"""
@@ -26,7 +31,7 @@ def get_data(users, spu):
     input_path = {}
     # 接受每个用户的输入
     for user in users:
-        path = input(f"请输入 {user} 的文件路径: ")
+        path = input(f"{BLUE}[*] 请输入 {user} 的文件路径: {ENDC}")
         input_path[user] = path
 
     # input_path = {
@@ -49,14 +54,14 @@ def get_predict_data(users, spu):
     input_path = {}
     # 接受每个用户的输入
     for user in users:
-        path = input(f"请输入 {user} 的文件路径: ")
+        path = input(f"{BLUE}[*] 请输入 {user} 的文件路径: {ENDC}")
         input_path[user] = path
 
     output_path = {}
 
     
     for user in users:
-        path = input(f"请输入 {user} 的输出路径: ")
+        path = input(f"{BLUE}[*] 请输入 {user} 的输出路径: {ENDC}")
         output_path[user] = path
 
     # print(f"input_path = {input_path}")
@@ -74,7 +79,7 @@ def get_predict_data(users, spu):
         ['ID'], input_path, output_path, 'alice', protocol='ECDH_PSI_3PC', precheck_input=False, broadcast_result=False
     )
 
-    print(f"[✓] 隐私求交数据已保存到 {output_path}")
+    print(f"{GREEN}[✓] 隐私求交数据已保存到 {output_path}{ENDC}")
 
     vdf2 = read_csv(output_path, spu=spu, keys='ID',
                     drop_keys='ID', psi_protocl="ECDH_PSI_3PC")
@@ -317,9 +322,9 @@ def level_predict(sl_model, test_data, output_path, self_party):
 
     # predict the test data
     y_pred = sl_model.predict(test_data)
-    print(f"type(y_pred) = {type(y_pred)}")
+    # print(f"type(y_pred) = {type(y_pred)}")
 
-    print(sf.reveal(y_pred))    
+    # print(sf.reveal(y_pred))    
 
     data = sf.reveal(y_pred)
 
@@ -352,7 +357,7 @@ def level_predict(sl_model, test_data, output_path, self_party):
     predicted_one_hot = tf.one_hot(max_indices, depth=tensor.shape[1])
 
     # 打印预测结果和真实标签，作为对比
-    print(f"predicted_one_hot = {predicted_one_hot}")
+    # print(f"predicted_one_hot = {predicted_one_hot}")
 
     # print(sf.reveal(test_label.partitions[carol].data))
 
@@ -360,7 +365,7 @@ def level_predict(sl_model, test_data, output_path, self_party):
 
     # output_file = "Commerce-Security-Governance-Over-privacy-alliance-CSGO/Commerce-Security-Governance-Over-privacy-alliance-CSGO--main/DataGen/result.csv"
 
-    output_file = input('[*] 请输入预测结果保存路径: ')
+    output_file = input(f'{BLUE}[*] 请输入等级预测结果保存路径: {ENDC}')
 
     df.to_csv(output_file, index=False)
 
@@ -372,7 +377,7 @@ def level_predict(sl_model, test_data, output_path, self_party):
 
     merge_data(credit_score_df, result_df, output_file)
 
-    print(f"[✓] 预测结果已保存到： {output_file}")
+    print(f"{GREEN}[✓] 等级预测结果已保存到： {output_file}{ENDC}")
 
     return output_file
 
@@ -395,13 +400,13 @@ def merge_data(credit_score_df, result_df, output_file):
     # 将修改后的数据保存到新的 CSV 文件中，或者覆盖原文件
     credit_score_df.to_csv(output_file, index=False)
 
-    print(f"已成功更新 level 列，处理后的行数为 {min_length} 行。")
+    # print(f"已成功更新 level 列，处理后的行数为 {min_length} 行。")
 
 
 def calculate_transaction_limits(plantform,order_amount_path, output_path,self_party_name):
 
     if self_party_name == 'carol':
-        print("[x] 无交易额度计算数据，跳过计算")
+        print(f"{RED}[x] 无交易额度计算数据，跳过计算{ENDC}")
         return
     
     # 读取订单金额数据和评级
@@ -424,7 +429,7 @@ def calculate_transaction_limits(plantform,order_amount_path, output_path,self_p
 
     transaction_limits.to_csv(output_path, index=False)
 
-    print(f"[✓] 交易额度已保存到 {output_path}")
+    print(f"{GREEN}[✓] 交易额度已保存到 {output_path}{ENDC}")
 
 
 def show_mode_result(history):
@@ -458,7 +463,8 @@ def show_mode_result(history):
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Val'], loc='upper left')
 
+    output_path = input(f"{BLUE}[*] 请输入模型展示图片保存路径：{ENDC}")
+    
     plt.tight_layout()
-    plt.savefig(
-        '/home/GPH/Documents/Commerce-Security-Governance-Over-privacy-alliance-CSGO-/model_results.png')
+    plt.savefig(output_path)
     plt.show()
